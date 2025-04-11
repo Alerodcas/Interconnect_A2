@@ -1,0 +1,7 @@
+# ninja log v6
+2	95	1744413135653316881	build.ninja	bf1edee5da4eeceb
+32	1183	1744413044379636161	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
+1030	1252	1744412667911629926	Interconnect_A2	acb4cd6a3c569d3b
+60	1002	1744413232726222224	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
+59	1380	1744413232726222224	CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o	d1a72baff34adde1
+1381	1530	1744413234046176690	Interconnect_A2	e63f47f9d4d26afc
