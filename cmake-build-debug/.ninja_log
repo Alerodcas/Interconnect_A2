@@ -1,7 +1,14 @@
 # ninja log v6
-2	95	1744413135653316881	build.ninja	bf1edee5da4eeceb
-32	1183	1744413044379636161	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
-1030	1252	1744412667911629926	Interconnect_A2	acb4cd6a3c569d3b
-60	1002	1744413232726222224	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
-59	1380	1744413232726222224	CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o	d1a72baff34adde1
-1381	1530	1744413234046176690	Interconnect_A2	e63f47f9d4d26afc
+2	95	1744416388480617425	build.ninja	bf1edee5da4eeceb
+3	904	1744416354273022416	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
+1878	2031	1744416356145001101	Interconnect_A2	e63f47f9d4d26afc
+2	1877	1744416354269022461	CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o	d1a72baff34adde1
+47	1892	1744416460211668940	CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o	d1a72baff34adde1
+1892	2040	1744416462055642909	Interconnect_A2	e63f47f9d4d26afc
+4	1224	1744416649000639989	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
+3	1596	1744416649000639989	CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o	d1a72baff34adde1
+1596	1790	1744416650592611682	Interconnect_A2	e63f47f9d4d26afc
+2	1034	1744416783018126511	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
+1034	1196	1744416784050106215	Interconnect_A2	e63f47f9d4d26afc
+1	1095	1744416796041869412	CMakeFiles/Interconnect_A2.dir/src/main.cpp.o	55b6bfdec8ac14c7
+1096	1245	1744416797137847682	Interconnect_A2	e63f47f9d4d26afc

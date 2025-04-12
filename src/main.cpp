@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <vector>
 #include "PE.hpp"
@@ -6,7 +7,8 @@
 
 int main() {
     PE pe(0, 0x10);
-    pe.loadInstructions("workloads/workload_0.txt");
+    pe.loadInstructions("../workloads/workload_0.txt");
+    //pe.getInstructions();
     pe.start();
     pe.join();
     return 0;
