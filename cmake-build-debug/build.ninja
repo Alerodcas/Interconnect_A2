@@ -56,6 +56,13 @@ build CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: CXX_COMPILER__Inter
   OBJECT_DIR = CMakeFiles/Interconnect_A2.dir
   OBJECT_FILE_DIR = CMakeFiles/Interconnect_A2.dir/src
 
+build CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o: CXX_COMPILER__Interconnect_A2_unscanned_Debug /home/ale/Documents/GitHub/Interconnect_A2/src/MainMemory.cpp || cmake_object_order_depends_target_Interconnect_A2
+  DEP_FILE = CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o.d
+  FLAGS = -g -std=gnu++2a -fdiagnostics-color=always
+  INCLUDES = -I/home/ale/Documents/GitHub/Interconnect_A2/include
+  OBJECT_DIR = CMakeFiles/Interconnect_A2.dir
+  OBJECT_FILE_DIR = CMakeFiles/Interconnect_A2.dir/src
+
 build CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o: CXX_COMPILER__Interconnect_A2_unscanned_Debug /home/ale/Documents/GitHub/Interconnect_A2/src/PE.cpp || cmake_object_order_depends_target_Interconnect_A2
   DEP_FILE = CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o.d
   FLAGS = -g -std=gnu++2a -fdiagnostics-color=always
@@ -78,7 +85,7 @@ build CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: CXX_COMPILER__Interconnect_
 #############################################
 # Link the executable Interconnect_A2
 
-build Interconnect_A2: CXX_EXECUTABLE_LINKER__Interconnect_A2_Debug CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o CMakeFiles/Interconnect_A2.dir/src/main.cpp.o
+build Interconnect_A2: CXX_EXECUTABLE_LINKER__Interconnect_A2_Debug CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o CMakeFiles/Interconnect_A2.dir/src/main.cpp.o
   FLAGS = -g
   LINK_LIBRARIES = -lpthread
   OBJECT_DIR = CMakeFiles/Interconnect_A2.dir

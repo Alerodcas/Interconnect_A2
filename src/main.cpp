@@ -1,35 +1,24 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include "PE.hpp"
+#include <PE.hpp>
 
-#include "PE.hpp"
+#include "Interconnect.hpp"
 
 int main() {
-    PE pe(0, 0x10);
-    pe.loadInstructions("../workloads/workload_0.txt");
-    //pe.getInstructions();
-    pe.start();
-    pe.join();
-    return 0;
-}
+    Interconnect interconnect;
+    interconnect.start();
 
-/*
-int main() {
-    std::vector<PE> pes;
+    std::vector<std::unique_ptr<PE>> pes;
 
-    // Crear 4 PE con diferentes QoS
-    for (int i = 0; i < 4; ++i) {
-        pes.emplace_back(i, 0x10 + i);  // IDs: 0-3, QoS: 0x10, 0x11, ...
-        pes[i].loadInstructions("workload_" + std::to_string(i) + ".txt");
+
+    for (int i = 0; i < 2; i++) {
+        auto pe = std::make_unique<PE>(i, 0x10 + i, &interconnect);
+        interconnect.registerPE(i, pe.get());
+        pes.push_back(std::move(pe));
+        pes[i]->loadInstructions("../workloads/workload_" + std::to_string(i) + ".txt");
     }
 
-    // Iniciar todos los hilos
-    for (auto& pe : pes) pe.start();
+    for (auto& pe : pes) pe->start();
+    for (auto& pe : pes) pe->join();
 
-    // Esperar a que terminen
-    for (auto& pe : pes) pe.join();
-
+    interconnect.stop();
     return 0;
 }
-*/

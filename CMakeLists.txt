@@ -10,6 +10,7 @@ file(GLOB SOURCES "src/*.cpp")
 
 add_executable(Interconnect_A2 ${SOURCES}
         include/Message.hpp
-        src/Interconnect.cpp)
+        src/Interconnect.cpp
+        src/MainMemory.cpp)
 target_link_libraries(Interconnect_A2 pthread)
 

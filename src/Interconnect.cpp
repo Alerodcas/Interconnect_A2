@@ -31,6 +31,11 @@ void Interconnect::sendMessage(const Message& msg) {
     cv.notify_one();
 }
 
+void Interconnect::registerPE(uint8_t id, PE* pe) {
+    peDirectory[id] = pe;
+}
+
+
 void Interconnect::processLoop() {
     while (true) {
         Message msg;
@@ -45,20 +50,68 @@ void Interconnect::processLoop() {
             messageQueue.pop();
         }
 
-        // Procesar mensaje
+        // Procesar el mensaje
         switch (msg.type) {
-            case MessageType::READ_MEM:
-                std::cout << "Interconnect: Procesa READ_MEM desde PE " << int(msg.src)
-                          << " en dirección 0x" << std::hex << msg.addr
+            case MessageType::READ_MEM: {
+                std::cout << "Interconnect: Procesando READ_MEM de PE " << int(msg.src)
+                          << " dirección 0x" << std::hex << msg.addr
                           << " (" << std::dec << msg.size << " bytes)\n";
-            break;
-            case MessageType::WRITE_MEM:
-                std::cout << "Interconnect: Procesa WRITE_MEM desde PE " << int(msg.src)
-                          << " en dirección 0x" << std::hex << msg.addr
+
+                auto data = mainMemory.read(msg.addr, msg.size);
+
+                // Crear respuesta
+                Message response;
+                response.type = MessageType::READ_RESP;
+                response.src = 0xFF; // Interconnect como origen
+                response.addr = msg.addr;
+                response.data = data;
+                response.qos = msg.qos;
+
+                if (peDirectory.count(msg.src)) {
+                    peDirectory[msg.src]->receiveResponse(response);
+                }
+
+                break;
+            }
+
+            case MessageType::WRITE_MEM: {
+                std::cout << "Interconnect: Procesando WRITE_MEM de PE " << int(msg.src)
+                          << " dirección 0x" << std::hex << msg.addr
                           << " (" << std::dec << msg.data.size() << " bytes)\n";
-            break;
+
+                mainMemory.write(msg.addr, msg.data);
+
+                // Crear respuesta
+                Message response;
+                response.type = MessageType::WRITE_RESP;
+                response.src = 0xFF;
+                response.addr = msg.addr;
+                response.size = 1; // OK (1), podés luego usar 0 si fallara
+
+                if (peDirectory.count(msg.src)) {
+                    peDirectory[msg.src]->receiveResponse(response);
+                }
+
+                break;
+            } case MessageType::BROADCAST_INVALIDATE: {
+                std::cout << "Interconnect: Procesando BROADCAST_INVALIDATE desde PE "
+                          << int(msg.src) << ", línea de caché " << std::hex << msg.addr << "\n";
+
+                // Mandar a todos los PEs excepto al origen
+                for (auto& [pe_id, pe_ptr] : peDirectory) {
+                    if (pe_id != msg.src) {
+                        if (pe_ptr) {
+                            pe_ptr->invalidateCacheLine(msg.addr);
+                        }
+                    }
+                }
+
+                break;
+            }
+
+
             default:
-                std::cout << "Interconnect: Mensaje tipo no implementado.\n";
+                std::cout << "Interconnect: Tipo de mensaje no implementado.\n";
         }
     }
 }
