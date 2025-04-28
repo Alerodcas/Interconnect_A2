@@ -8,6 +8,8 @@ include_directories(include)
 
 file(GLOB SOURCES "src/*.cpp")
 
-add_executable(Interconnect_A2 ${SOURCES})
+add_executable(Interconnect_A2 ${SOURCES}
+        include/Message.hpp
+        src/Interconnect.cpp)
 target_link_libraries(Interconnect_A2 pthread)
 
