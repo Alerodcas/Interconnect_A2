@@ -19,6 +19,17 @@ int main() {
     for (auto& pe : pes) pe->start();
     for (auto& pe : pes) pe->join();
 
+
+    // Ejecuta el script de Python
+    int status = system("python graph.py");
+
+    if (status == -1) {
+        printf("Error al ejecutar el script de Python.\n");
+    } else {
+        printf("Script de Python ejecutado correctamente.\n");
+    }
+
     interconnect.stop();
     return 0;
 }
+
