@@ -3,6 +3,8 @@
 #include <mutex>           // Para la exclusión mutua al imprimir
 
 extern std::mutex cout_mutex; // Mutex global definido en main.cpp
+extern std::mutex cin_mutex; // Mutex global definido en main.cpp
+extern bool stepByStep; // Condición externa de ejecución paso por paso
 
 // Constructor por defecto de la clase Interconnect
 Interconnect::Interconnect() {}
@@ -47,6 +49,13 @@ void Interconnect::registerPE(uint8_t id, PE* pe) {
 // Bucle principal de procesamiento de mensajes del Interconnect (ejecutado en un thread separado)
 void Interconnect::processLoop() {
     while (true) { // Bucle infinito para procesar mensajes continuamente
+        if (stepByStep) {
+            {
+                std::lock_guard<std::mutex> lock(cin_mutex);
+                std::cin.get(); // Espera a que el usuario presione Enter
+            }
+        }
+
         Message msg; // Variable para almacenar el mensaje a procesar
 
         {
@@ -66,8 +75,8 @@ void Interconnect::processLoop() {
             case MessageType::READ_MEM: { // Si el tipo de mensaje es READ_MEM (lectura de memoria)
                 {
                     std::lock_guard<std::mutex> lock(cout_mutex);
-                    std::cout << "Interconnect: Procesando READ_MEM de PE " << int(msg.src)
-                              << " dirección 0x" << std::hex << msg.addr
+                    std::cout << "IntConnect: Procesando READ_MEM PE " << int(msg.src)
+                              << " Dirección 0x" << std::hex << msg.addr
                               << " (" << std::dec << msg.size << " bytes)\n";
                 }
 
@@ -93,8 +102,8 @@ void Interconnect::processLoop() {
             case MessageType::WRITE_MEM: { // Si el tipo de mensaje es WRITE_MEM (escritura en memoria)
                 {
                     std::lock_guard<std::mutex> lock(cout_mutex);
-                    std::cout << "Interconnect: Procesando WRITE_MEM de PE " << int(msg.src)
-                              << " dirección 0x" << std::hex << msg.addr
+                    std::cout << "IntConnect: Procesando WRITE_MEM PE " << int(msg.src)
+                              << " Dirección 0x" << std::hex << msg.addr
                               << " (" << std::dec << msg.data.size() << " bytes)\n";
                 }
 
@@ -118,8 +127,8 @@ void Interconnect::processLoop() {
             case MessageType::BROADCAST_INVALIDATE: { // Si el tipo de mensaje es BROADCAST_INVALIDATE
                 {
                     std::lock_guard<std::mutex> lock(cout_mutex);
-                    std::cout << "Interconnect: Procesando BROADCAST_INVALIDATE desde PE "
-                              << int(msg.src) << ", línea de caché " << std::hex << msg.addr << "\n";
+                    std::cout << "IntConnect: Procesando BROADCAST_INVALIDATE PE "
+                              << int(msg.src) << ", Linea Caché " << std::hex << msg.addr << "\n";
                 }
 
                 // Iterar a través de todos los PEs registrados
@@ -142,7 +151,7 @@ void Interconnect::processLoop() {
             default: // Si el tipo de mensaje no está implementado
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "Interconnect: Tipo de mensaje no implementado.\n";
+                std::cout << "IntConnect: Tipo de mensaje no implementado.\n";
             }
         }
     }

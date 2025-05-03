@@ -840,6 +840,7 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
   /usr/include/c++/11/bits/hashtable_policy.h \
   /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/ios_base.h \
+  /usr/include/c++/11/bits/istream.tcc \
   /usr/include/c++/11/bits/iterator_concepts.h \
   /usr/include/c++/11/bits/locale_classes.h \
   /usr/include/c++/11/bits/locale_classes.tcc \
@@ -923,6 +924,8 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
   /usr/include/c++/11/initializer_list \
   /usr/include/c++/11/ios \
   /usr/include/c++/11/iosfwd \
+  /usr/include/c++/11/iostream \
+  /usr/include/c++/11/istream \
   /usr/include/c++/11/limits \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/new \

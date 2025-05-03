@@ -6,6 +6,8 @@
 #include <mutex>           // Para la exclusión mutua al imprimir
 
 extern std::mutex cout_mutex; // Mutex global definido en main.cpp
+extern std::mutex cin_mutex; // Mutex global definido en main.cpp
+extern bool stepByStep; // Condición externa de ejecución paso por paso
 
 // Constructor de la clase PE
 PE::PE(int id, uint8_t qos, Interconnect* interconnect)
@@ -36,14 +38,14 @@ void PE::getInstructions() {
 void PE::invalidateCacheLine(uint32_t cache_line) {
     // Verifica si el índice de la línea de caché está dentro de los límites válidos
     if (cache_line >= NUM_BLOCKS) {
-        std::cerr << "PE " << id << ": ERROR - Línea de caché inválida: " << cache_line << "\n";
+        std::cerr << "PE " << id << ": ERROR - Línea Caché Inválida: " << "\n";
         return; // Sale de la función si la línea de caché es inválida
     }
 
     cache[cache_line].valid = false; // Marca la línea de caché como inválida
     {
         std::lock_guard<std::mutex> lock(cout_mutex);
-        std::cout << "PE " << id << ": Línea de caché " << cache_line << " invalidada.\n";
+        std::cout << "PE " << id << ": Línea Caché " << cache_line << " Invalidada.\n";
     }
 
 }
@@ -68,14 +70,16 @@ void PE::executeInstruction(const std::string& instruction) {
         if (!result.empty()) { // Si el resultado no está vacío (cache hit)
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "PE " << id << " (QoS " << (int)qos << ") [CACHE HIT] Addr 0x"
+                std::cout << "PE " << id <<  ": Encontrado CACHE HIT Addr 0x"
                           << std::hex << addr << ", " << std::dec << size << " bytes.\n";
             }
         } else { // Si la lectura de la caché devuelve un vector vacío (cache miss)
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "PE " << id << " (QoS " << (int)qos << ") [CACHE MISS] Addr 0x"
-                          << std::hex << addr << " → Solicitando al Interconnect.\n";
+                std::cout << "PE " << id << ": Encontrado CACHE MISS Addr 0x"
+                          << std::hex << addr << "\n";
+                std::cout << "PE " << id << ": Solicitud READ Addr 0x"
+                          << std::hex << addr << "\n";
             }
             // Construir y enviar mensaje de READ_MEM al Interconnect
             Message msg;
@@ -102,8 +106,10 @@ void PE::executeInstruction(const std::string& instruction) {
 
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << " escribió en caché Addr 0x" << std::hex << addr
-                    << " (" << std::dec << num_lines << " líneas) y envía WRITE_MEM al Interconnect.\n";
+            std::cout << "PE " << id << ": Escritura Linea Caché Addr 0x" << std::hex << addr
+                    << " (" << std::dec << num_lines << "\n";
+            std::cout << "PE " << id << ": Solicitud WRITE Addr 0x" << std::hex << addr
+                    << " (" << std::dec << num_lines << "\n";
         }
 
         // Construir y enviar mensaje de WRITE_MEM al Interconnect
@@ -135,7 +141,7 @@ void PE::executeInstruction(const std::string& instruction) {
 
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << " envió BROADCAST_INVALIDATE para línea 0x"
+            std::cout << "PE " << id << " Solicitud Broadcast Invalidade Addr 0x"
                     << std::hex << cache_line << "\n";
         }
     }
@@ -164,6 +170,13 @@ void PE::handleResponses() {
 
     // Mientras la cola de respuestas no esté vacía
     while (!responseQueue.empty()) {
+        if (stepByStep) {
+            {
+                std::lock_guard<std::mutex> lock(cin_mutex);
+                std::cin.get(); // Espera a que el usuario presione Enter
+            }
+        }
+
         Message msg = responseQueue.front(); // Obtiene el mensaje del frente de la cola
         responseQueue.pop();                 // Remueve el mensaje del frente de la cola
         lock.unlock();                       // Libera el lock para permitir que otros threads (ej: el que llama a receiveResponse) accedan a la cola
@@ -172,7 +185,7 @@ void PE::handleResponses() {
         if (msg.type == MessageType::READ_RESP) {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "PE " << id << ": Recibió READ_RESP, actualizando caché dirección 0x"
+                std::cout << "PE " << id << ": Recibido READ_RESP Actualizado Linea Caché Addr 0x"
                         << std::hex << msg.addr << "\n";
             }
             writeToCache(msg.addr, msg.data); // Escribe los datos recibidos en la caché
@@ -181,7 +194,7 @@ void PE::handleResponses() {
         else if (msg.type == MessageType::WRITE_RESP) {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "PE " << id << ": Recibió WRITE_RESP, escritura confirmada\n";
+                std::cout << "PE " << id << ": Recibido WRITE_RESP Escritura Confirmada\n";
             }
         }
         // Si el tipo de mensaje no es reconocido
@@ -210,12 +223,22 @@ void PE::join() {
 // Método que contiene el bucle principal de ejecución del PE
 void PE::execute() {
     for (const auto& instr : instructionMemory) { // Itera a través de cada instrucción cargada en la memoria de instrucciones
+        if (stepByStep) {
+            {
+                std::lock_guard<std::mutex> lock(cin_mutex);
+                std::cin.get(); // Espera a que el usuario presione Enter
+            }
+        }
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Instrucción → " << instr << "\n";
         }
+        if (!responseQueue.empty()) {
+            handleResponses();         // Prioriza respuestas provenientes del Interconnect
+        }
+
         executeInstruction(instr); // Ejecuta la instrucción actual
-        handleResponses();         // Procesa cualquier respuesta pendiente después de ejecutar una instrucción
+
     }
 }
 
