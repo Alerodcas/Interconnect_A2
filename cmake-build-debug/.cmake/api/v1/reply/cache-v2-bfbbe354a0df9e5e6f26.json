@@ -15,7 +15,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/addr2line.exe"
+			"value" : "/usr/bin/addr2line"
 		},
 		{
 			"name" : "CMAKE_AR",
@@ -31,7 +31,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/ar.exe"
+			"value" : "/usr/bin/ar"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/cmake-build-debug"
+			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -131,7 +131,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/cmake/win/x64/bin/cmake.exe"
+			"value" : "/home/itsrichard/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake"
 		},
 		{
 			"name" : "CMAKE_CPACK_COMMAND",
@@ -143,7 +143,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/cmake/win/x64/bin/cpack.exe"
+			"value" : "/home/itsrichard/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cpack"
 		},
 		{
 			"name" : "CMAKE_CTEST_COMMAND",
@@ -155,7 +155,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/cmake/win/x64/bin/ctest.exe"
+			"value" : "/home/itsrichard/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/ctest"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER",
@@ -171,7 +171,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/g++.exe"
+			"value" : "/usr/bin/c++"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
@@ -187,7 +187,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/gcc-ar.exe"
+			"value" : "/usr/bin/gcc-ar-11"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_RANLIB",
@@ -203,7 +203,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "/usr/bin/gcc-ranlib-11"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -286,22 +286,6 @@
 			"value" : "-O2 -g -DNDEBUG"
 		},
 		{
-			"name" : "CMAKE_CXX_STANDARD_LIBRARIES",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Libraries linked by default with all C++ applications."
-				}
-			],
-			"type" : "STRING",
-			"value" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32"
-		},
-		{
 			"name" : "CMAKE_C_COMPILER",
 			"properties" : 
 			[
@@ -315,7 +299,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/gcc.exe"
+			"value" : "/usr/bin/cc"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -331,7 +315,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/gcc-ar.exe"
+			"value" : "/usr/bin/gcc-ar-11"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_RANLIB",
@@ -347,7 +331,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "/usr/bin/gcc-ranlib-11"
 		},
 		{
 			"name" : "CMAKE_C_FLAGS",
@@ -430,22 +414,6 @@
 			"value" : "-O2 -g -DNDEBUG"
 		},
 		{
-			"name" : "CMAKE_C_STANDARD_LIBRARIES",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Libraries linked by default with all C applications."
-				}
-			],
-			"type" : "STRING",
-			"value" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32"
-		},
-		{
 			"name" : "CMAKE_DLLTOOL",
 			"properties" : 
 			[
@@ -459,7 +427,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/dlltool.exe"
+			"value" : "CMAKE_DLLTOOL-NOTFOUND"
 		},
 		{
 			"name" : "CMAKE_EXECUTABLE_FORMAT",
@@ -471,7 +439,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "Unknown"
+			"value" : "ELF"
 		},
 		{
 			"name" : "CMAKE_EXE_LINKER_FLAGS",
@@ -554,6 +522,22 @@
 			"value" : ""
 		},
 		{
+			"name" : "CMAKE_EXPORT_COMPILE_COMMANDS",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Enable/Disable output of compile commands during generation."
+				}
+			],
+			"type" : "BOOL",
+			"value" : ""
+		},
+		{
 			"name" : "CMAKE_EXTRA_GENERATOR",
 			"properties" : 
 			[
@@ -575,7 +559,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -587,7 +571,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "MinGW Makefiles"
+			"value" : "Unix Makefiles"
 		},
 		{
 			"name" : "CMAKE_GENERATOR_INSTANCE",
@@ -626,18 +610,6 @@
 			"value" : ""
 		},
 		{
-			"name" : "CMAKE_GNUtoMS",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Convert GNU import libraries to MS format (requires Visual Studio)"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "OFF"
-		},
-		{
 			"name" : "CMAKE_HOME_DIRECTORY",
 			"properties" : 
 			[
@@ -647,7 +619,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2"
+			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -659,7 +631,19 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Program Files (x86)/Interconnect_A2"
+			"value" : "/usr/local"
+		},
+		{
+			"name" : "CMAKE_INSTALL_SO_NO_EXE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Install .so files without execute permission."
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "1"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -675,7 +659,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/ld.exe"
+			"value" : "/usr/bin/ld"
 		},
 		{
 			"name" : "CMAKE_MAKE_PROGRAM",
@@ -687,11 +671,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "make program"
+					"value" : "Path to a program."
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe"
+			"value" : "/usr/bin/gmake"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -787,7 +771,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/nm.exe"
+			"value" : "/usr/bin/nm"
 		},
 		{
 			"name" : "CMAKE_NUMBER_OF_MAKEFILES",
@@ -815,7 +799,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/objcopy.exe"
+			"value" : "/usr/bin/objcopy"
 		},
 		{
 			"name" : "CMAKE_OBJDUMP",
@@ -831,7 +815,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/objdump.exe"
+			"value" : "/usr/bin/objdump"
 		},
 		{
 			"name" : "CMAKE_PLATFORM_INFO_INITIALIZED",
@@ -895,115 +879,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/ranlib.exe"
-		},
-		{
-			"name" : "CMAKE_RC_COMPILER",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "RC compiler"
-				}
-			],
-			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/windres.exe"
-		},
-		{
-			"name" : "CMAKE_RC_COMPILER_WORKS",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : ""
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
-			"name" : "CMAKE_RC_FLAGS",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Flags for Windows Resource Compiler during all build types."
-				}
-			],
-			"type" : "STRING",
-			"value" : ""
-		},
-		{
-			"name" : "CMAKE_RC_FLAGS_DEBUG",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Flags for Windows Resource Compiler during DEBUG builds."
-				}
-			],
-			"type" : "STRING",
-			"value" : ""
-		},
-		{
-			"name" : "CMAKE_RC_FLAGS_MINSIZEREL",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Flags for Windows Resource Compiler during MINSIZEREL builds."
-				}
-			],
-			"type" : "STRING",
-			"value" : ""
-		},
-		{
-			"name" : "CMAKE_RC_FLAGS_RELEASE",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Flags for Windows Resource Compiler during RELEASE builds."
-				}
-			],
-			"type" : "STRING",
-			"value" : ""
-		},
-		{
-			"name" : "CMAKE_RC_FLAGS_RELWITHDEBINFO",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Flags for Windows Resource Compiler during RELWITHDEBINFO builds."
-				}
-			],
-			"type" : "STRING",
-			"value" : ""
+			"value" : "/usr/bin/ranlib"
 		},
 		{
 			"name" : "CMAKE_READELF",
@@ -1019,7 +895,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/readelf.exe"
+			"value" : "/usr/bin/readelf"
 		},
 		{
 			"name" : "CMAKE_ROOT",
@@ -1031,7 +907,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/cmake/win/x64/share/cmake-3.31"
+			"value" : "/home/itsrichard/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/share/cmake-3.31"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1239,7 +1115,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/strip.exe"
+			"value" : "/usr/bin/strip"
 		},
 		{
 			"name" : "CMAKE_TAPI",
@@ -1256,6 +1132,18 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "CMAKE_TAPI-NOTFOUND"
+		},
+		{
+			"name" : "CMAKE_UNAME",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "uname command"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/bin/uname"
 		},
 		{
 			"name" : "CMAKE_VERBOSE_MAKEFILE",
@@ -1283,7 +1171,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/cmake-build-debug"
+			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug"
 		},
 		{
 			"name" : "Interconnect_A2_IS_TOP_LEVEL",
@@ -1307,31 +1195,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2"
-		},
-		{
-			"name" : "Python3_EXECUTABLE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/.venv/Scripts/python.exe"
-		},
-		{
-			"name" : "Python_EXECUTABLE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/.venv/Scripts/python.exe"
+			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2"
 		},
 		{
 			"name" : "_CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED",

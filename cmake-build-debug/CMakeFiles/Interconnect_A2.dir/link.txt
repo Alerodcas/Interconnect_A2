@@ -1,3 +1,1 @@
-"C:\Program Files\JetBrains\CLion 2025.1\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\Interconnect_A2.dir/objects.a
-C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\ar.exe qc CMakeFiles\Interconnect_A2.dir/objects.a @CMakeFiles\Interconnect_A2.dir\objects1.rsp
-C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\Interconnect_A2.dir/objects.a -Wl,--no-whole-archive -o Interconnect_A2.exe -Wl,--out-implib,libInterconnect_A2.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Interconnect_A2.dir\linkLibs.rsp
+/usr/bin/c++ -g CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o CMakeFiles/Interconnect_A2.dir/src/main.cpp.o -o Interconnect_A2  -lpthread

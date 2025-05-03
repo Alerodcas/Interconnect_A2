@@ -1,6 +1,8 @@
 #include <PE.hpp>
-
 #include "Interconnect.hpp"
+#include <mutex>
+
+std::mutex cout_mutex; // Declaración del mutex global para proteger std::cout
 
 int main() {
     Interconnect interconnect;
@@ -10,7 +12,7 @@ int main() {
 
 
     for (int i = 0; i < 2; i++) {
-        auto pe = std::make_unique<PE>(i, 0x10 + i, &interconnect);
+        auto pe = std::make_unique<PE>(i, 0x00 + i, &interconnect);
         interconnect.registerPE(i, pe.get());
         pes.push_back(std::move(pe));
         pes[i]->loadInstructions("../workloads/workload_" + std::to_string(i) + ".txt");
@@ -19,8 +21,7 @@ int main() {
     for (auto& pe : pes) pe->start();
     for (auto& pe : pes) pe->join();
 
-
-    // Ejecuta el script de Python
+    // Ejecuta el script de Python para graficar
     int status = system("python graph.py");
 
     if (status == -1) {

@@ -1,16 +1,14 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.obj"
-  "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.obj.d"
-  "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.obj"
-  "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.obj.d"
-  "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.obj"
-  "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.obj.d"
-  "CMakeFiles/Interconnect_A2.dir/src/main.cpp.obj"
-  "CMakeFiles/Interconnect_A2.dir/src/main.cpp.obj.d"
-  "Interconnect_A2.exe"
-  "Interconnect_A2.exe.manifest"
+  "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o"
+  "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o.d"
+  "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o"
+  "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o.d"
+  "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o"
+  "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o.d"
+  "CMakeFiles/Interconnect_A2.dir/src/main.cpp.o"
+  "CMakeFiles/Interconnect_A2.dir/src/main.cpp.o.d"
+  "Interconnect_A2"
   "Interconnect_A2.pdb"
-  "libInterconnect_A2.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

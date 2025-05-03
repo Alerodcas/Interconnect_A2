@@ -8,10 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/src/Interconnect.cpp" "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.obj" "gcc" "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.obj.d"
-  "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/src/MainMemory.cpp" "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.obj" "gcc" "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.obj.d"
-  "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/src/PE.cpp" "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.obj" "gcc" "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.obj.d"
-  "C:/Users/nicva/OneDrive - Estudiantes ITCR/Arquitectura II/Interconnect_A2/src/main.cpp" "CMakeFiles/Interconnect_A2.dir/src/main.cpp.obj" "gcc" "CMakeFiles/Interconnect_A2.dir/src/main.cpp.obj.d"
+  "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/src/Interconnect.cpp" "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o" "gcc" "CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o.d"
+  "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/src/MainMemory.cpp" "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o" "gcc" "CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o.d"
+  "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/src/PE.cpp" "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o" "gcc" "CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o.d"
+  "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/src/main.cpp" "CMakeFiles/Interconnect_A2.dir/src/main.cpp.o" "gcc" "CMakeFiles/Interconnect_A2.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
