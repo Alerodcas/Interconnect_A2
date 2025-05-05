@@ -56,6 +56,13 @@ void PE::executeInstruction(const std::string& instruction) {
     std::string opcode;                 // Variable para almacenar el código de operación (la primera palabra de la instrucción)
     iss >> opcode;                      // Lee el primer token (opcode) del stringstream
 
+    if (stepByStep) {
+        {
+            std::lock_guard<std::mutex> lock(cin_mutex);
+            std::cin.get(); // Espera a que el usuario presione Enter
+        }
+    }
+
     // Si el opcode es "READ_MEM" (operación de lectura de memoria)
     if (opcode == "READ_MEM") {
         std::string addr_str; // String para almacenar la dirección (en formato hexadecimal)
@@ -102,11 +109,12 @@ void PE::executeInstruction(const std::string& instruction) {
         iss >> addr_str >> num_lines; // Lee la dirección y el número de líneas del stringstream
 
         uint32_t addr = std::stoul(addr_str, nullptr, 16); // Convierte la dirección hexadecimal a un entero sin signo de 32 bits
-        std::vector<uint8_t> fake_data;
+        std::vector<uint8_t> concatenated_data;
 
         for (size_t i = 0; i < num_lines; ++i) {
-            std::vector<uint8_t> fake_data(16, id); // Simula 16 bytes de datos para escribir, llenándolos con el ID del PE
-            writeToCache(addr + i, fake_data);       // Escribe los datos simulados en la caché
+            std::vector<uint8_t> current_line_data(16, id); // Simula 16 bytes de datos para la línea actual
+            writeToCache(addr + i, current_line_data);       // Escribe los datos simulados en la caché
+            concatenated_data.insert(concatenated_data.end(), current_line_data.begin(), current_line_data.end());
         }
 
         {
@@ -119,11 +127,11 @@ void PE::executeInstruction(const std::string& instruction) {
 
         // Construir y enviar mensaje de WRITE_MEM al Interconnect
         Message msg;
-        msg.type = MessageType::WRITE_MEM; // Establece el tipo de mensaje a WRITE_MEM
-        msg.src = id;                      // Establece la fuente del mensaje como el ID del PE
+        msg.type = MessageType::WRITE_MEM;  // Establece el tipo de mensaje a WRITE_MEM
+        msg.src = id;                       // Establece la fuente del mensaje como el ID del PE
         msg.qos = qos;                      // Establece la calidad de servicio del mensaje
         msg.addr = addr;                    // Establece la dirección de memoria a escribir
-        msg.data = fake_data;              // Establece los datos a escribir
+        msg.data = concatenated_data;       // Establece los datos a escribir
 
         interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
 
@@ -146,7 +154,7 @@ void PE::executeInstruction(const std::string& instruction) {
 
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << " Solicitud Broadcast Invalidade Addr 0x"
+            std::cout << "PE " << id << " Solicitud Broadcast Invalidate Addr 0x"
                     << std::hex << cache_line << "\n";
         }
     }
@@ -249,11 +257,16 @@ void PE::execute() {
             }
         }
 
+        if (!responseQueue.empty()) {
+            handleResponses(); // Maneja las respuestas pendientes del Interconnect
+        }
+
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Instrucción → " << instr << "\n";
         }
         executeInstruction(instr); // Ejecuta la instrucción actual
+
     }
 }
 

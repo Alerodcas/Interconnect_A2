@@ -70,10 +70,6 @@ int main(int argc, char *argv[]) {
         pes[i]->loadInstructions("../workloads/workload_" + std::to_string(i) + ".txt");
     }
 
-    if (stepByStep) {
-        std::cout << "<<< Ejecución paso a paso habilitada: Presiona Enter para siguiente paso >>>\n";
-    }
-
     for (auto& pe : pes) pe->start();
     for (auto& pe : pes) pe->join();
 

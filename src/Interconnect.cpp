@@ -49,12 +49,6 @@ void Interconnect::registerPE(uint8_t id, PE* pe) {
 // Bucle principal de procesamiento de mensajes del Interconnect (ejecutado en un thread separado)
 void Interconnect::processLoop() {
     while (true) { // Bucle infinito para procesar mensajes continuamente
-        if (stepByStep) {
-            {
-                std::lock_guard<std::mutex> lock(cin_mutex);
-                std::cin.get(); // Espera a que el usuario presione Enter
-            }
-        }
 
         Message msg; // Variable para almacenar el mensaje a procesar
 
@@ -68,6 +62,13 @@ void Interconnect::processLoop() {
 
             msg = messageQueue.front(); // Obtiene el mensaje del frente de la cola
             messageQueue.pop();         // Remueve el mensaje del frente de la cola
+        }
+
+        if (stepByStep) {
+            {
+                std::lock_guard<std::mutex> lock(cin_mutex);
+                std::cin.get(); // Espera a que el usuario presione Enter
+            }
         }
 
         // Procesar el mensaje según su tipo
@@ -92,7 +93,6 @@ void Interconnect::processLoop() {
                 }
 
                 peDirectory[msg.src]->receiveResponse(response);
-                peDirectory[msg.src]->handleResponses();
 
                 break;
             }
@@ -117,7 +117,6 @@ void Interconnect::processLoop() {
                 }
 
                 peDirectory[msg.src]->receiveResponse(response);
-                peDirectory[msg.src]->handleResponses();
 
                 break;
             }
@@ -141,8 +140,6 @@ void Interconnect::processLoop() {
                             }
 
                             pe_ptr->receiveResponse(invAck);
-                            pe_ptr->handleResponses();
-
                         }
                     }
                 }
@@ -166,7 +163,6 @@ void Interconnect::processLoop() {
                 }
 
                 peDirectory[sourcePE]->receiveResponse(invComplete);
-                peDirectory[msg.src]->handleResponses();
 
                 break;
             }
