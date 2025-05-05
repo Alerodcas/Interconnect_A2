@@ -209,16 +209,24 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: \
  /usr/include/c++/11/bits/this_thread_sleep.h \
  /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
  /usr/include/x86_64-linux-gnu/bits/semaphore.h \
- /usr/include/c++/11/thread \
+ /usr/include/c++/11/thread /usr/include/c++/11/unordered_map \
+ /usr/include/c++/11/bits/hashtable.h \
+ /usr/include/c++/11/bits/hashtable_policy.h \
+ /usr/include/c++/11/bits/enable_special_members.h \
+ /usr/include/c++/11/bits/node_handle.h \
+ /usr/include/c++/11/bits/unordered_map.h \
+ /usr/include/c++/11/bits/erase_if.h \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/Message.hpp \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/PE.hpp \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/CacheBlock.hpp \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/Interconnect.hpp \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/MainMemory.hpp \
- /usr/include/c++/11/unordered_map /usr/include/c++/11/bits/hashtable.h \
- /usr/include/c++/11/bits/hashtable_policy.h \
- /usr/include/c++/11/bits/enable_special_members.h \
- /usr/include/c++/11/bits/node_handle.h \
- /usr/include/c++/11/bits/unordered_map.h \
- /usr/include/c++/11/bits/erase_if.h /usr/include/c++/11/iostream \
- /usr/include/c++/11/istream /usr/include/c++/11/bits/istream.tcc
+ /usr/include/c++/11/iostream /usr/include/c++/11/istream \
+ /usr/include/c++/11/bits/istream.tcc /usr/include/c++/11/algorithm \
+ /usr/include/c++/11/bits/ranges_algo.h \
+ /usr/include/c++/11/bits/ranges_algobase.h /usr/include/c++/11/iterator \
+ /usr/include/c++/11/bits/stream_iterator.h \
+ /usr/include/c++/11/bits/ranges_util.h \
+ /usr/include/c++/11/pstl/glue_algorithm_defs.h \
+ /usr/include/c++/11/functional /usr/include/c++/11/bits/std_function.h \
+ /usr/include/c++/11/pstl/execution_defs.h

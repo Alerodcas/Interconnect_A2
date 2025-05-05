@@ -7,7 +7,7 @@
 
 extern std::mutex cout_mutex; // Mutex global definido en main.cpp
 extern std::mutex cin_mutex; // Mutex global definido en main.cpp
-extern bool stepByStep; // Condición externa de ejecución paso por paso
+extern std::mutex execution; // Mutex global definido en main.cpp
 
 // Constructor de la clase PE
 PE::PE(int id, uint8_t qos, Interconnect* interconnect)
@@ -35,19 +35,22 @@ void PE::getInstructions() {
 }
 
 // Método para invalidar una línea específica de la caché del PE
-void PE::invalidateCacheLine(uint32_t cache_line) {
-    // Verifica si el índice de la línea de caché está dentro de los límites válidos
-    if (cache_line >= NUM_BLOCKS) {
-        std::cerr << "PE " << id << ": ERROR - Línea Caché Inválida: " << "\n";
-        return; // Sale de la función si la línea de caché es inválida
+void PE::invalidateCacheLine(uint32_t addr) { // Cambiado el nombre del parámetro a addr para mayor claridad
+    size_t blockIndex = (addr / 16) % NUM_BLOCKS; // Calcula el índice del bloque de caché usando la dirección
+    // Verifica si la línea de caché es válida y si la etiqueta coincide
+    if (cache[blockIndex].valid && cache[blockIndex].tag == addr / 16) {
+        cache[blockIndex].valid = false; // Marca la línea de caché como inválida
+        {
+            std::lock_guard<std::mutex> lock(cout_mutex);
+            std::cout << "PE " << id << ": Línea Caché 0x" << std::hex << addr << " Invalidada.\n";
+        }
+    } else {
+        // No hace nada si la línea no es válida o la etiqueta no coincide
+        {
+            std::lock_guard<std::mutex> lock(cout_mutex);
+            std::cout << "PE " << id << ": Línea Caché 0x" << std::hex << addr << " no encontrada o ya inválida.\n";
+        }
     }
-
-    cache[cache_line].valid = false; // Marca la línea de caché como inválida
-    {
-        std::lock_guard<std::mutex> lock(cout_mutex);
-        std::cout << "PE " << id << ": Línea Caché " << cache_line << " Invalidada.\n";
-    }
-
 }
 
 // Método para ejecutar una instrucción individual
@@ -56,11 +59,10 @@ void PE::executeInstruction(const std::string& instruction) {
     std::string opcode;                 // Variable para almacenar el código de operación (la primera palabra de la instrucción)
     iss >> opcode;                      // Lee el primer token (opcode) del stringstream
 
-    if (stepByStep) {
-        {
-            std::lock_guard<std::mutex> lock(cin_mutex);
-            std::cin.get(); // Espera a que el usuario presione Enter
-        }
+
+    {
+        std::lock_guard<std::mutex> lock(cin_mutex);
+        std::cin.get(); // Espera a que el usuario presione Enter
     }
 
     // Si el opcode es "READ_MEM" (operación de lectura de memoria)
@@ -120,9 +122,9 @@ void PE::executeInstruction(const std::string& instruction) {
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Escritura Linea Caché Addr 0x" << std::hex << addr
-                    << " (" << std::dec << num_lines << "\n";
+                    << " (" << std::dec << num_lines << " Lineas) \n";
             std::cout << "PE " << id << ": Solicitud WRITE Addr 0x" << std::hex << addr
-                    << " (" << std::dec << num_lines << " Linea) \n";
+                    << " (" << std::dec << num_lines << " Lineas) \n";
         }
 
         // Construir y enviar mensaje de WRITE_MEM al Interconnect
@@ -183,11 +185,10 @@ void PE::handleResponses() {
 
     // Mientras la cola de respuestas no esté vacía
     while (!responseQueue.empty()) {
-        if (stepByStep) {
-            {
-                std::lock_guard<std::mutex> lock(cin_mutex);
-                std::cin.get(); // Espera a que el usuario presione Enter
-            }
+
+        {
+            std::lock_guard<std::mutex> lock(cin_mutex);
+            std::cin.get(); // Espera a que el usuario presione Enter
         }
 
         Message msg = responseQueue.front(); // Obtiene el mensaje del frente de la cola
@@ -250,23 +251,17 @@ void PE::join() {
 // Método que contiene el bucle principal de ejecución del PE
 void PE::execute() {
     for (const auto& instr : instructionMemory) { // Itera a través de cada instrucción cargada en la memoria de instrucciones
-        if (stepByStep) {
-            {
-                std::lock_guard<std::mutex> lock(cin_mutex);
-                std::cin.get(); // Espera a que el usuario presione Enter
-            }
-        }
-
-        if (!responseQueue.empty()) {
-            handleResponses(); // Maneja las respuestas pendientes del Interconnect
+        {
+            std::lock_guard<std::mutex> lock(cin_mutex);
+            std::cin.get(); // Espera a que el usuario presione Enter
         }
 
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Instrucción → " << instr << "\n";
         }
-        executeInstruction(instr); // Ejecuta la instrucción actual
 
+        executeInstruction(instr); // Ejecuta la instrucción actual
     }
 }
 
