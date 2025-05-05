@@ -74,13 +74,7 @@ void PE::executeInstruction(const std::string& instruction) {
                           << std::hex << addr << ", " << std::dec << size << " bytes.\n";
             }
         } else { // Si la lectura de la caché devuelve un vector vacío (cache miss)
-            {
-                std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "PE " << id << ": Encontrado CACHE MISS Addr 0x"
-                          << std::hex << addr << "\n";
-                std::cout << "PE " << id << ": Solicitud READ Addr 0x"
-                          << std::hex << addr << "\n";
-            }
+
             // Construir y enviar mensaje de READ_MEM al Interconnect
             Message msg;
             msg.type = MessageType::READ_MEM; // Establece el tipo de mensaje a READ_MEM
@@ -88,6 +82,14 @@ void PE::executeInstruction(const std::string& instruction) {
             msg.qos = qos;                     // Establece la calidad de servicio del mensaje
             msg.addr = addr;                   // Establece la dirección de memoria a leer
             msg.size = size;                   // Establece el tamaño de los datos a leer
+
+            {
+                std::lock_guard<std::mutex> lock(cout_mutex);
+                std::cout << "PE " << id << ": Encontrado CACHE MISS Addr 0x"
+                          << std::hex << addr << "\n";
+                std::cout << "PE " << id << ": Solicitud READ_MEM a IntConnect Addr 0x"
+                          << std::hex << addr << "\n";
+            }
 
             interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
         }
@@ -100,16 +102,19 @@ void PE::executeInstruction(const std::string& instruction) {
         iss >> addr_str >> num_lines; // Lee la dirección y el número de líneas del stringstream
 
         uint32_t addr = std::stoul(addr_str, nullptr, 16); // Convierte la dirección hexadecimal a un entero sin signo de 32 bits
+        std::vector<uint8_t> fake_data;
 
-        std::vector<uint8_t> fake_data(16, id); // Simula 16 bytes de datos para escribir, llenándolos con el ID del PE
-        writeToCache(addr, fake_data);       // Escribe los datos simulados en la caché
+        for (size_t i = 0; i < num_lines; ++i) {
+            std::vector<uint8_t> fake_data(16, id); // Simula 16 bytes de datos para escribir, llenándolos con el ID del PE
+            writeToCache(addr + i, fake_data);       // Escribe los datos simulados en la caché
+        }
 
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Escritura Linea Caché Addr 0x" << std::hex << addr
                     << " (" << std::dec << num_lines << "\n";
             std::cout << "PE " << id << ": Solicitud WRITE Addr 0x" << std::hex << addr
-                    << " (" << std::dec << num_lines << "\n";
+                    << " (" << std::dec << num_lines << " Linea) \n";
         }
 
         // Construir y enviar mensaje de WRITE_MEM al Interconnect
@@ -133,9 +138,9 @@ void PE::executeInstruction(const std::string& instruction) {
         // Construir y enviar mensaje de BROADCAST_INVALIDATE al Interconnect
         Message msg;
         msg.type = MessageType::BROADCAST_INVALIDATE; // Establece el tipo de mensaje a BROADCAST_INVALIDATE
-        msg.src = id;                               // Establece la fuente del mensaje como el ID del PE
-        msg.qos = qos;                               // Establece la calidad de servicio del mensaje
-        msg.addr = cache_line;                      // Establece la línea de caché a invalidar
+        msg.src = id;                                 // Establece la fuente del mensaje como el ID del PE
+        msg.qos = qos;                                // Establece la calidad de servicio del mensaje
+        msg.addr = cache_line;                        // Establece la línea de caché a invalidar
 
         interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
 
@@ -186,7 +191,7 @@ void PE::handleResponses() {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido READ_RESP Actualizado Linea Caché Addr 0x"
-                        << std::hex << msg.addr << "\n";
+                          << std::hex << msg.addr << "\n";
             }
             writeToCache(msg.addr, msg.data); // Escribe los datos recibidos en la caché
         }
@@ -197,11 +202,25 @@ void PE::handleResponses() {
                 std::cout << "PE " << id << ": Recibido WRITE_RESP Escritura Confirmada\n";
             }
         }
+        // Si el tipo de mensaje es INV_ACK (respuesta a una invalidación)
+        else if (msg.type == MessageType::INV_ACK) {
+            {
+                std::lock_guard<std::mutex> lock(cout_mutex);
+                std::cout << "PE " << id << ": Recibido INV_ACK del PE " << int(msg.src) << "\n";
+            }
+        }
+        // Si el tipo de mensaje es INV_COMPLETE (indicación de que todas las invalidaciones fueron completadas)
+        else if (msg.type == MessageType::INV_COMPLETE) {
+            {
+                std::lock_guard<std::mutex> lock(cout_mutex);
+                std::cout << "PE " << id << ": Recibido INV_COMPLETE. Invalidaciones completadas.\n";
+            }
+        }
         // Si el tipo de mensaje no es reconocido
         else {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << "PE " << id << ": Recibió tipo de mensaje inesperado\n";
+                std::cout << "PE " << id << ": Recibió tipo de mensaje inesperado: " << static_cast<int>(msg.type) << "\n";
             }
         }
 
@@ -229,16 +248,12 @@ void PE::execute() {
                 std::cin.get(); // Espera a que el usuario presione Enter
             }
         }
+
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Instrucción → " << instr << "\n";
         }
-        if (!responseQueue.empty()) {
-            handleResponses();         // Prioriza respuestas provenientes del Interconnect
-        }
-
         executeInstruction(instr); // Ejecuta la instrucción actual
-
     }
 }
 

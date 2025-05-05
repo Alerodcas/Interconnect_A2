@@ -73,13 +73,6 @@ void Interconnect::processLoop() {
         // Procesar el mensaje según su tipo
         switch (msg.type) {
             case MessageType::READ_MEM: { // Si el tipo de mensaje es READ_MEM (lectura de memoria)
-                {
-                    std::lock_guard<std::mutex> lock(cout_mutex);
-                    std::cout << "IntConnect: Procesando READ_MEM PE " << int(msg.src)
-                              << " Dirección 0x" << std::hex << msg.addr
-                              << " (" << std::dec << msg.size << " bytes)\n";
-                }
-
                 // Simula la lectura de la memoria principal
                 auto data = mainMemory.read(msg.addr, msg.size);
 
@@ -91,62 +84,92 @@ void Interconnect::processLoop() {
                 response.data = data;                   // Los datos leídos de la memoria principal
                 response.qos = msg.qos;                   // Propaga la QoS de la solicitud
 
-                // Enviar la respuesta al PE solicitante si está registrado
-                if (peDirectory.count(msg.src)) {
-                    peDirectory[msg.src]->receiveResponse(response);
+                {
+                    std::lock_guard<std::mutex> lock(cout_mutex);
+                    std::cout << "IntConnect: Procesado READ_MEM PE " << int(msg.src)
+                              << " Dirección 0x" << std::hex << msg.addr
+                              << " (" << std::dec << msg.size << " bytes)\n";
                 }
+
+                peDirectory[msg.src]->receiveResponse(response);
+                peDirectory[msg.src]->handleResponses();
 
                 break;
             }
 
             case MessageType::WRITE_MEM: { // Si el tipo de mensaje es WRITE_MEM (escritura en memoria)
-                {
-                    std::lock_guard<std::mutex> lock(cout_mutex);
-                    std::cout << "IntConnect: Procesando WRITE_MEM PE " << int(msg.src)
-                              << " Dirección 0x" << std::hex << msg.addr
-                              << " (" << std::dec << msg.data.size() << " bytes)\n";
-                }
-
                 // Simula la escritura en la memoria principal
+
                 mainMemory.write(msg.addr, msg.data);
 
                 // Crear mensaje de respuesta WRITE_RESP
                 Message response;
                 response.type = MessageType::WRITE_RESP; // Establece el tipo de mensaje a WRITE_RESP
-                response.src = 0xFF;                    // Establece la fuente como el Interconnect
-                response.addr = msg.addr;                  // La dirección de la respuesta es la misma que la solicitud
-                response.size = 1;                      // Simula un estado OK (puedes definir códigos de error)
+                response.src = 0xFF;                     // Establece la fuente como el Interconnect
+                response.addr = msg.addr;                // La dirección de la respuesta es la misma que la solicitud
+                response.size = 1;                       // Simula un estado OK (puedes definir códigos de error)
 
-                // Enviar la respuesta al PE solicitante si está registrado
-                if (peDirectory.count(msg.src)) {
-                    peDirectory[msg.src]->receiveResponse(response);
+                {
+                    std::lock_guard<std::mutex> lock(cout_mutex);
+                    std::cout << "IntConnect: Procesado WRITE_MEM PE " << int(msg.src)
+                              << " Dirección 0x" << std::hex << msg.addr
+                              << " (" << std::dec << msg.data.size() << " bytes)\n";
                 }
+
+                peDirectory[msg.src]->receiveResponse(response);
+                peDirectory[msg.src]->handleResponses();
 
                 break;
             }
             case MessageType::BROADCAST_INVALIDATE: { // Si el tipo de mensaje es BROADCAST_INVALIDATE
-                {
-                    std::lock_guard<std::mutex> lock(cout_mutex);
-                    std::cout << "IntConnect: Procesando BROADCAST_INVALIDATE PE "
-                              << int(msg.src) << ", Linea Caché " << std::hex << msg.addr << "\n";
-                }
 
-                // Iterar a través de todos los PEs registrados
+                uint8_t sourcePE = msg.src; // Guarda el ID del PE que originó el BROADCAST
+
+                // Enviar INV_ACK a todos los PEs excepto al origen
                 for (auto& [pe_id, pe_ptr] : peDirectory) {
-                    // Enviar la invalidación a todos los PEs excepto al que originó el mensaje
-                    if (pe_id != msg.src) {
+                    if (pe_id != sourcePE) {
                         if (pe_ptr) {
                             pe_ptr->invalidateCacheLine(msg.addr);
+                            Message invAck;
+                            invAck.type = MessageType::INV_ACK;
+                            invAck.src = pe_id; // La fuente del INV_ACK es el PE que lo envía
+                            invAck.qos = pe_ptr->getQoS(); // Obtener la QoS del PE que responde (podría ser la del mensaje original)
+                            // No es necesario incluir addr aquí, ya que el INV_ACK se refiere a la invalidación reciente
+                            {
+                                std::lock_guard<std::mutex> lock(cout_mutex);
+                                std::cout << "IntConnect: Enviando INV_ACK a PE " << int(pe_id) << " Invalidación línea 0x" << std::hex << msg.addr << "\n";
+                            }
+
+                            pe_ptr->receiveResponse(invAck);
+                            pe_ptr->handleResponses();
+
                         }
                     }
                 }
 
-                // Aquí podrías implementar la lógica para enviar un INV_ACK de cada PE y luego un INV_COMPLETE al originador
-                // Esto dependerá de la complejidad del protocolo de coherencia de caché que quieras simular.
+                {
+                    std::lock_guard<std::mutex> lock(cout_mutex);
+                    std::cout << "IntConnect: Procesado BROADCAST_INVALIDATE PE "
+                  << int(msg.src) << ", Linea Caché " << std::hex << msg.addr << "\n";
+                }
+
+                // Después de enviar todas las invalidaciones y los INV_ACKs,
+                // el Interconnect envía el INV_COMPLETE al PE que originó el BROADCAST_INVALIDATE.
+                Message invComplete;
+                invComplete.type = MessageType::INV_COMPLETE;
+                invComplete.dest = sourcePE; // El destino es el PE que originó el BROADCAST
+                invComplete.qos = peDirectory[sourcePE]->getQoS(); // Obtener la QoS del PE destino
+
+                {
+                    std::lock_guard<std::mutex> lock(cout_mutex);
+                    std::cout << "IntConnect: Enviando INV_COMPLETE a PE " << int(sourcePE) << " por invalidación de línea 0x" << std::hex << msg.addr << "\n";
+                }
+
+                peDirectory[sourcePE]->receiveResponse(invComplete);
+                peDirectory[msg.src]->handleResponses();
 
                 break;
             }
-
 
             default: // Si el tipo de mensaje no está implementado
             {
