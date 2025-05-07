@@ -60,6 +60,8 @@ void Interconnect::registerPE(uint8_t id, PE* pe) {
 void Interconnect::processLoop() {
     while (true) { // Bucle mientras el Interconnect esté en ejecución
         Message msg; // Variable para almacenar el mensaje a procesar
+        int arriveTransferTime;
+        int sendTransferTime;
 
         {
             std::unique_lock<std::mutex> lock(queueMutex); // Adquiere un unique lock para la cola de mensajes
@@ -94,19 +96,12 @@ void Interconnect::processLoop() {
         switch (msg.type) {
             case MessageType::READ_MEM: {
 
-                int transferCycles = 6 / BytesForCicle;
-                if (transferCycles == 0) transferCycles = 1;
+                // -------------------- Procesar Mensaje --------------------
 
-                clockCycle += transferCycles;
+                arriveTransferTime = 6 / BytesForCicle;
+                if (arriveTransferTime == 0) arriveTransferTime = 1;
 
-                auto data = mainMemory.read(msg.addr, msg.size);
-                Message response;
-                response.type = MessageType::READ_RESP;
-                response.src = 0xFF;
-                response.addr = msg.addr;
-                response.data = data;
-                response.qos = msg.qos;
-                msg.size = data.size();
+                clockCycle += arriveTransferTime;
 
                 {
                     std::lock_guard<std::mutex> lock(cout_mutex);
@@ -114,27 +109,48 @@ void Interconnect::processLoop() {
                                   << " Dirección 0x" << std::hex << msg.addr
                                   << " (" << std::dec << msg.size << " bytes)\n";
                     writeOutput( "READ_MEM 0 " +
-                                std::to_string(msg.size) + " P" + std::to_string(msg.src) + " " + std::to_string(clockCycle));
+                                std::to_string(6) + " P" + std::to_string(msg.src) + " " + std::to_string(clockCycle));
                 }
 
+                auto data = mainMemory.read(msg.addr, msg.size); // Obtener el bloque deseado de memoria
+
+                // -------------------- Generar Respuesta --------------------
+
+                clockCycle++;
+
+                {
+                    std::lock_guard<std::mutex> lock(cout_mutex);
+                    std::cout << "IntConnect: Enviado READ_RESP a PE " << int(msg.src)
+                                  << " Dirección 0x" << std::hex << msg.addr
+                                  << " (" << std::dec << msg.size << " bytes)\n";
+                    writeOutput( "READ_RESP 1 " +
+                                std::to_string(6 + data.size()) + " P" + std::to_string(msg.src) + " " + std::to_string(clockCycle));
+                }
+
+                Message response;
+                response.type = MessageType::READ_RESP;
+                response.dest = msg.src;
+                response.addr = msg.addr;
+                response.data = data;
+                response.qos = msg.qos;
+
+                sendTransferTime = (6 + response.data.size()) / BytesForCicle;
+                if (sendTransferTime == 0) sendTransferTime = 1;
+
                 peDirectory[msg.src]->receiveResponse(response);
+                peDirectory[msg.src]->setCycleCounter(clockCycle + sendTransferTime);
                 peDirectory[msg.src]->handleResponses();
 
                 break;
             }
             case MessageType::WRITE_MEM: {
 
-                int transferCycles = 6 / BytesForCicle;
+                // -------------------- Procesar Mensaje --------------------
+
+                int transferCycles = 6 + msg.data.size() / BytesForCicle;
                 if (transferCycles == 0) transferCycles = 1;
 
                 clockCycle += transferCycles;
-
-                mainMemory.write(msg.addr, msg.data);
-                Message response;
-                response.type = MessageType::WRITE_RESP;
-                response.src = 0xFF;
-                response.addr = msg.addr;
-                response.size = 1;
 
                 {
                     std::lock_guard<std::mutex> lock(cout_mutex);
@@ -142,10 +158,35 @@ void Interconnect::processLoop() {
                                   << " Dirección 0x" << std::hex << msg.addr
                                   << " (" << std::dec << msg.data.size() << " bytes)\n";
                     writeOutput( "WRITE_MEM 0 " +
-                                std::to_string(msg.size) + " P" + std::to_string(msg.src) + " " + std::to_string(clockCycle));
+                                std::to_string(6 + msg.data.size()) + " P" + std::to_string(msg.src) + " " + std::to_string(clockCycle));
                 }
 
+                mainMemory.write(msg.addr, msg.data); // Escribir la información en Memoria
+
+                // -------------------- Generar Respuesta --------------------
+
+                clockCycle++;
+
+                Message response;
+                response.type = MessageType::WRITE_RESP;
+                response.qos = msg.qos;
+                response.dest = msg.src;
+                response.status = true;
+
+                {
+                    std::lock_guard<std::mutex> lock(cout_mutex);
+                    std::cout << "IntConnect: Enviado WRITE_RESP PE " << int(msg.src)
+                                  << " Dirección 0x" << std::hex << msg.addr
+                                  << " (Exito)\n";
+                    writeOutput( "WRITE_RESP 0 " +
+                                std::to_string(3) + " P" + std::to_string(msg.src) + " " + std::to_string(clockCycle));
+                }
+
+                sendTransferTime = 3 / BytesForCicle;
+                if (sendTransferTime == 0) sendTransferTime = 1;
+
                 peDirectory[msg.src]->receiveResponse(response);
+                peDirectory[msg.src]->setCycleCounter(clockCycle + sendTransferTime);
                 peDirectory[msg.src]->handleResponses();
 
                 break;
@@ -161,20 +202,23 @@ void Interconnect::processLoop() {
 
                 {
                     std::lock_guard<std::mutex> lock(cout_mutex);
-                    std::cout << "IntConnect: Enviado INV_ACK a PE's Invalidación línea 0x" << std::hex << msg.addr << "\n";
+                    std::cout << "IntConnect: Procesado BROADCAST_INVALIDATE PE " << int(msg.src)
+                                  << " Dirección 0x" << std::hex << msg.addr << "\n";
                     writeOutput( "BROADCAST_INVALIDATE 0 " +
-                                std::to_string(msg.size) + " P" + std::to_string(sourcePE) + " " + std::to_string(clockCycle));
-                    writeOutput( "INV_ACK 1 " +
-                                std::to_string(msg.size) + " All " + std::to_string(clockCycle));
+                                std::to_string(6) + " P" + std::to_string(sourcePE) + " " + std::to_string(clockCycle));
                 }
 
                 clockCycle++;
 
                 {
                     std::lock_guard<std::mutex> lock(cout_mutex);
+                    std::cout << "IntConnect: Enviado INV_ACK a PE's Invalidación 0x" << std::hex << msg.addr << "\n";
                     writeOutput( "INV_ACK 1 " +
-                                std::to_string(msg.size) + " All " + std::to_string(clockCycle));
+                                std::to_string(2) + " All " + std::to_string(clockCycle));
                 }
+
+                sendTransferTime = (2) / BytesForCicle;
+                if (sendTransferTime == 0) sendTransferTime = 1;
 
                 for (auto& [pe_id, pe_ptr] : peDirectory) {
                     if (pe_id != sourcePE && pe_ptr) {
@@ -184,6 +228,7 @@ void Interconnect::processLoop() {
                         invAck.src = pe_id;
                         invAck.qos = pe_ptr->getQoS();
                         pe_ptr->receiveResponse(invAck);
+                        pe_ptr->setCycleCounter(clockCycle + sendTransferTime);
                         pe_ptr->handleResponses();
                     }
                 }
@@ -199,10 +244,14 @@ void Interconnect::processLoop() {
                     std::lock_guard<std::mutex> lock(cout_mutex);
                     std::cout << "IntConnect: Enviando INV_COMPLETE a PE " << int(sourcePE) << " por invalidación de línea 0x" << std::hex << msg.addr << "\n";
                     writeOutput( "INV_ACK 1 " +
-                                std::to_string(msg.size) + " P" + std::to_string(sourcePE) + " " + std::to_string(clockCycle));
+                                std::to_string(2) + " P" + std::to_string(sourcePE) + " " + std::to_string(clockCycle));
                 }
 
+                sendTransferTime = (2) / BytesForCicle;
+                if (sendTransferTime == 0) sendTransferTime = 1;
+
                 peDirectory[sourcePE]->receiveResponse(invComplete);
+                peDirectory[msg.src]->setCycleCounter(clockCycle + sendTransferTime);
                 peDirectory[sourcePE]->handleResponses();
                 break;
             }

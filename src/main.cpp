@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     //  |     Ejecución Script de Graficación     |
     //  -------------------------------------------
 
-    // system("python3 graph.py");
+    system("python3 graph.py");
 
     return 0;
 }

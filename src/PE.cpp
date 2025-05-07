@@ -8,6 +8,7 @@
 extern std::mutex cout_mutex; // Mutex global definido en main.cpp
 extern std::mutex cin_mutex; // Mutex global definido en main.cpp
 extern std::mutex execution; // Mutex global definido en main.cpp
+std::mutex cycle;
 
 // Constructor de la clase PE
 PE::PE(int id, uint8_t qos, Interconnect* interconnect)
@@ -40,13 +41,15 @@ void PE::executeInstruction(const std::string& instruction) {
     std::istringstream iss(instruction); // Crea un stringstream para parsear la instrucción
     std::string opcode;                 // Variable para almacenar el código de operación (la primera palabra de la instrucción)
     iss >> opcode;                      // Lee el primer token (opcode) del stringstream
-
-    cycleCounter++; // ejecutando una instrucción → toma un ciclo
+    std::lock_guard<std::mutex> lock(cycle);
 
     {
         std::lock_guard<std::mutex> lock(cin_mutex);
         std::cin.get(); // Espera a que el usuario presione Enter
     }
+
+    cycleCounter++;
+
 
     // Si el opcode es "READ_MEM" (operación de lectura de memoria)
     if (opcode == "READ_MEM") {
@@ -83,7 +86,7 @@ void PE::executeInstruction(const std::string& instruction) {
                 std::cout << "PE " << id << ": Solicitud READ_MEM a IntConnect Addr 0x"
                           << std::hex << addr << "\n";
                 writeOutput( "READ_MEM 1 " +
-                                std::to_string(msg.size) + " IC " + std::to_string(cycleCounter));
+                                std::to_string(6) + " IC " + std::to_string(cycleCounter));
             }
 
             interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
@@ -117,7 +120,7 @@ void PE::executeInstruction(const std::string& instruction) {
             std::cout << "PE " << id << ": Solicitud WRITE Addr 0x" << std::hex << addr
                     << " (" << std::dec << num_lines << " Lineas) \n";
             writeOutput( "WRITE_MEM 1 " +
-                            std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
+                            std::to_string(6 + msg.data.size()) + " IC " + std::to_string(cycleCounter));
         }
 
         interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
@@ -142,7 +145,7 @@ void PE::executeInstruction(const std::string& instruction) {
             std::cout << "PE " << id << " Solicitud Broadcast Invalidate Addr 0x"
                     << std::hex << cache_line << "\n";
             writeOutput( "BROADCAST_INVALIDATE 1 " +
-                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
+                std::to_string(6) + " IC " + std::to_string(cycleCounter));
         }
 
         interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
@@ -171,6 +174,11 @@ void PE::receiveResponse(const Message& msg) {
 void PE::handleResponses() {
     std::unique_lock<std::mutex> lock(responseMutex); // Adquiere un unique lock del mutex, permite esperas condicionales
 
+    {
+        std::lock_guard<std::mutex> lock(cycle);
+        cycleCounter++;
+    }
+
     // Mientras la cola de respuestas no esté vacía
     while (!responseQueue.empty()) {
 
@@ -190,7 +198,7 @@ void PE::handleResponses() {
                 std::cout << "PE " << id << ": Recibido READ_RESP Actualizado Linea Caché Addr 0x"
                           << std::hex << msg.addr << "\n";
                 writeOutput( "READ_RESP 0 " +
-                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
+                                std::to_string(6 + msg.data.size()) + " IC " + std::to_string(cycleCounter));
             }
             writeToCache(msg.addr, msg.data); // Escribe los datos recibidos en la caché
         }
@@ -201,27 +209,25 @@ void PE::handleResponses() {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido WRITE_RESP Escritura Confirmada\n";
                 writeOutput( "WRITE_RESP 0 " +
-                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
+                                std::to_string(3) + " IC " + std::to_string(cycleCounter));
             }
         }
         // Si el tipo de mensaje es INV_ACK (respuesta a una invalidación)
         else if (msg.type == MessageType::INV_ACK) {
-            cycleCounter += 2;
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido INV_ACK del PE " << int(msg.src) << "\n";
                 writeOutput( "INV_ACK 0 " +
-                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
+                                std::to_string(2) + " IC " + std::to_string(cycleCounter));
             }
         }
         // Si el tipo de mensaje es INV_COMPLETE (indicación de que todas las invalidaciones fueron completadas)
         else if (msg.type == MessageType::INV_COMPLETE) {
-            cycleCounter += 2;
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido INV_COMPLETE. Invalidaciones completadas.\n";
                 writeOutput( "INV_COMPLETE 0 " +
-                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
+                                std::to_string(2) + " IC " + std::to_string(cycleCounter));
             }
         }
         // Si el tipo de mensaje no es reconocido
@@ -230,7 +236,7 @@ void PE::handleResponses() {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibió tipo de mensaje inesperado: " << static_cast<int>(msg.type) << "\n";
                 writeOutput( "UNKNOWN 0 " +
-                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
+                                std::to_string(2) + " IC " + std::to_string(cycleCounter));
             }
         }
 
@@ -330,5 +336,8 @@ int PE::getCycleCounter() const {
 }
 
 void PE::setCycleCounter(int newClock) {
-    cycleCounter = newClock;
+    {
+        std::lock_guard<std::mutex> lock(cycle);
+        cycleCounter = newClock;
+    }
 }
