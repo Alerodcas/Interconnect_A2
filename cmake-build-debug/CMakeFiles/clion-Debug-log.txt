@@ -1,4 +1,4 @@
-/home/itsrichard/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2" -B "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug"
+/home/itsrichard/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" "-DPython_EXECUTABLE=/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/.venv/bin/python" "-DPython3_EXECUTABLE=/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/.venv/bin/python" -S "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2" -B "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug"
 -- The C compiler identification is GNU 11.4.0
 -- The CXX compiler identification is GNU 11.4.0
 -- Detecting C compiler ABI info
@@ -11,6 +11,13 @@
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done (0.2s)
+-- Configuring done (0.7s)
 -- Generating done (0.0s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    Python3_EXECUTABLE
+    Python_EXECUTABLE
+
+
 -- Build files have been written to: /home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug

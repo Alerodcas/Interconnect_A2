@@ -224,6 +224,12 @@ Interconnect_A2_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Interconnect_A2_SOURCE_DIR:STATIC=/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2
 
+//No help, variable specified on the command line.
+Python3_EXECUTABLE:UNINITIALIZED=/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/.venv/bin/python
+
+//No help, variable specified on the command line.
+Python_EXECUTABLE:UNINITIALIZED=/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/.venv/bin/python
+
 
 ########################
 # INTERNAL cache entries

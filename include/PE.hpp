@@ -27,7 +27,7 @@ public:
 
     void invalidateCacheLine(uint32_t cache_line);
 
-
+    void writeOutput(const std::string &line);
 
     int getId() const;
     uint8_t getQoS() const;
@@ -41,6 +41,8 @@ private:
     std::vector<std::string> instructionMemory;
 
     std::thread thread;
+
+    std::string outputPath;
 
     //Cache
     static constexpr int NUM_BLOCKS = 128;

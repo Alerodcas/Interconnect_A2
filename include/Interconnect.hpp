@@ -1,4 +1,4 @@
-    #ifndef INTERCONNECT_HPP
+#ifndef INTERCONNECT_HPP
 #define INTERCONNECT_HPP
 
 #include <queue>
@@ -33,6 +33,9 @@ public:
 
 private:
     void processLoop(); // hilo del interconnect
+    void writeOutput(const std::string &line);
+
+    std::string outputPath;
 
     MainMemory mainMemory;
 

@@ -11,9 +11,10 @@ extern std::mutex execution; // Mutex global definido en main.cpp
 
 // Constructor de la clase PE
 PE::PE(int id, uint8_t qos, Interconnect* interconnect)
-    : id(id),                 // Inicializa el ID del PE con el valor proporcionado
-      qos(qos),               // Inicializa la calidad de servicio (QoS) del PE
-      interconnect(interconnect) {} // Inicializa el puntero al objeto Interconnect
+    : id(id),                      // Inicializa el ID del PE con el valor proporcionado
+      qos(qos),                    // Inicializa la calidad de servicio (QoS) del PE
+      interconnect(interconnect),  // Inicializa el puntero al objeto Interconnect
+      outputPath("../output/pe" + std::to_string(id) + ".txt") {} // Inicializa la dirección del txt de salida
 
 // Método para cargar las instrucciones desde un archivo
 void PE::loadInstructions(const std::string& filepath) {
@@ -34,31 +35,11 @@ void PE::getInstructions() {
     }
 }
 
-// Método para invalidar una línea específica de la caché del PE
-void PE::invalidateCacheLine(uint32_t addr) { // Cambiado el nombre del parámetro a addr para mayor claridad
-    size_t blockIndex = (addr / 16) % NUM_BLOCKS; // Calcula el índice del bloque de caché usando la dirección
-    // Verifica si la línea de caché es válida y si la etiqueta coincide
-    if (cache[blockIndex].valid && cache[blockIndex].tag == addr / 16) {
-        cache[blockIndex].valid = false; // Marca la línea de caché como inválida
-        {
-            std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << ": Línea Caché 0x" << std::hex << addr << " Invalidada.\n";
-        }
-    } else {
-        // No hace nada si la línea no es válida o la etiqueta no coincide
-        {
-            std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << ": Línea Caché 0x" << std::hex << addr << " no encontrada o ya inválida.\n";
-        }
-    }
-}
-
 // Método para ejecutar una instrucción individual
 void PE::executeInstruction(const std::string& instruction) {
     std::istringstream iss(instruction); // Crea un stringstream para parsear la instrucción
     std::string opcode;                 // Variable para almacenar el código de operación (la primera palabra de la instrucción)
     iss >> opcode;                      // Lee el primer token (opcode) del stringstream
-
 
     {
         std::lock_guard<std::mutex> lock(cin_mutex);
@@ -98,6 +79,8 @@ void PE::executeInstruction(const std::string& instruction) {
                           << std::hex << addr << "\n";
                 std::cout << "PE " << id << ": Solicitud READ_MEM a IntConnect Addr 0x"
                           << std::hex << addr << "\n";
+                writeOutput( "READ_MEM 1 " +
+                                std::to_string(msg.size) + " " + std::to_string(0));
             }
 
             interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
@@ -107,7 +90,7 @@ void PE::executeInstruction(const std::string& instruction) {
     // Si el opcode es "WRITE_MEM" (operación de escritura en memoria)
     else if (opcode == "WRITE_MEM") {
         std::string addr_str;   // String para almacenar la dirección (en formato hexadecimal)
-        size_t num_lines;       // Número de líneas de caché a escribir (aunque actualmente no se usa directamente para el tamaño de los datos simulados)
+        size_t num_lines;       // Número de líneas de caché a escribir
         iss >> addr_str >> num_lines; // Lee la dirección y el número de líneas del stringstream
 
         uint32_t addr = std::stoul(addr_str, nullptr, 16); // Convierte la dirección hexadecimal a un entero sin signo de 32 bits
@@ -119,14 +102,6 @@ void PE::executeInstruction(const std::string& instruction) {
             concatenated_data.insert(concatenated_data.end(), current_line_data.begin(), current_line_data.end());
         }
 
-        {
-            std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << ": Escritura Linea Caché Addr 0x" << std::hex << addr
-                    << " (" << std::dec << num_lines << " Lineas) \n";
-            std::cout << "PE " << id << ": Solicitud WRITE Addr 0x" << std::hex << addr
-                    << " (" << std::dec << num_lines << " Lineas) \n";
-        }
-
         // Construir y enviar mensaje de WRITE_MEM al Interconnect
         Message msg;
         msg.type = MessageType::WRITE_MEM;  // Establece el tipo de mensaje a WRITE_MEM
@@ -134,6 +109,16 @@ void PE::executeInstruction(const std::string& instruction) {
         msg.qos = qos;                      // Establece la calidad de servicio del mensaje
         msg.addr = addr;                    // Establece la dirección de memoria a escribir
         msg.data = concatenated_data;       // Establece los datos a escribir
+
+        {
+            std::lock_guard<std::mutex> lock(cout_mutex);
+            std::cout << "PE " << id << ": Escritura Linea Caché Addr 0x" << std::hex << addr
+                    << " (" << std::dec << num_lines << " Lineas) \n";
+            std::cout << "PE " << id << ": Solicitud WRITE Addr 0x" << std::hex << addr
+                    << " (" << std::dec << num_lines << " Lineas) \n";
+            writeOutput( "WRITE_MEM 1 " +
+                            std::to_string(msg.data.size()) + " " + std::to_string(0));
+        }
 
         interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
 
@@ -152,19 +137,22 @@ void PE::executeInstruction(const std::string& instruction) {
         msg.qos = qos;                                // Establece la calidad de servicio del mensaje
         msg.addr = cache_line;                        // Establece la línea de caché a invalidar
 
-        interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
-
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << " Solicitud Broadcast Invalidate Addr 0x"
                     << std::hex << cache_line << "\n";
+            writeOutput( "BROADCAST_INVALIDATE 1 " +
+                std::to_string(msg.data.size()) + " " + std::to_string(0));
         }
+
+        interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
     }
     // Si el opcode no coincide con ninguna instrucción conocida
     else {
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Instrucción desconocida → " << instruction << "\n";
+            writeOutput( "UNKNOWN 0 0 " + std::to_string(0));
         }
     }
 }
@@ -201,6 +189,8 @@ void PE::handleResponses() {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido READ_RESP Actualizado Linea Caché Addr 0x"
                           << std::hex << msg.addr << "\n";
+                writeOutput( "READ_RESP 0 " +
+                                std::to_string(msg.data.size()) + " " + std::to_string(0));
             }
             writeToCache(msg.addr, msg.data); // Escribe los datos recibidos en la caché
         }
@@ -209,6 +199,8 @@ void PE::handleResponses() {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido WRITE_RESP Escritura Confirmada\n";
+                writeOutput( "WRITE_RESP 0 " +
+                                std::to_string(msg.data.size()) + " " + std::to_string(0));
             }
         }
         // Si el tipo de mensaje es INV_ACK (respuesta a una invalidación)
@@ -216,6 +208,8 @@ void PE::handleResponses() {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido INV_ACK del PE " << int(msg.src) << "\n";
+                writeOutput( "INV_ACK 0 " +
+                                std::to_string(msg.data.size()) + " " + std::to_string(0));
             }
         }
         // Si el tipo de mensaje es INV_COMPLETE (indicación de que todas las invalidaciones fueron completadas)
@@ -223,6 +217,8 @@ void PE::handleResponses() {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido INV_COMPLETE. Invalidaciones completadas.\n";
+                writeOutput( "INV_COMPLETE 0 " +
+                                std::to_string(msg.data.size()) + " " + std::to_string(0));
             }
         }
         // Si el tipo de mensaje no es reconocido
@@ -230,10 +226,12 @@ void PE::handleResponses() {
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibió tipo de mensaje inesperado: " << static_cast<int>(msg.type) << "\n";
+                writeOutput( "UNKNOWN 0 " +
+                                std::to_string(msg.data.size()) + " " + std::to_string(0));
             }
         }
 
-        lock.lock(); // Re-adquiere el lock antes de la siguiente iteración del bucle
+        lock.lock(); // Readquiere el lock antes de la siguiente iteración del bucle
     }
 }
 
@@ -284,6 +282,33 @@ std::vector<uint8_t> PE::readFromCache(uint32_t addr, size_t size) {
     } else {
         // Si hay un cache miss, devuelve un vector vacío
         return {};
+    }
+}
+
+// Método para invalidar una línea específica de la caché del PE
+void PE::invalidateCacheLine(uint32_t addr) { // Cambiado el nombre del parámetro a addr para mayor claridad
+    size_t blockIndex = (addr / 16) % NUM_BLOCKS; // Calcula el índice del bloque de caché usando la dirección
+    // Verifica si la línea de caché es válida y si la etiqueta coincide
+    if (cache[blockIndex].valid && cache[blockIndex].tag == addr / 16) {
+        cache[blockIndex].valid = false; // Marca la línea de caché como inválida
+        {
+            std::lock_guard<std::mutex> lock(cout_mutex);
+            std::cout << "PE " << id << ": Línea Caché 0x" << std::hex << addr << " Invalidada.\n";
+        }
+    } else {
+        // No hace nada si la línea no es válida o la etiqueta no coincide
+        {
+            std::lock_guard<std::mutex> lock(cout_mutex);
+            std::cout << "PE " << id << ": Línea Caché 0x" << std::hex << addr << " no encontrada o ya inválida.\n";
+        }
+    }
+}
+
+// Método para agregar una línea al final de un archivo
+void PE::writeOutput(const std::string& line) {
+    std::ofstream file(outputPath, std::ios::app); // Abre el archivo en modo append
+    if (file.is_open()) {
+        file << line << '\n'; // Escribe la línea con salto de línea
     }
 }
 

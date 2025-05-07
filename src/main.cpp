@@ -2,6 +2,7 @@
 #include <PE.hpp>
 #include "Interconnect.hpp"
 #include <mutex>
+#include <fstream>
 
 std::mutex cout_mutex; // Declaración del mutex global para proteger std::cout
 std::mutex cin_mutex; // Declaración del mutex global para proteger std::cin
@@ -34,8 +35,26 @@ int main(int argc, char *argv[]) {
     }
 
     //  -------------------------------------------
+    //  |          Limpiar Docs de Salida         |
+    //  -------------------------------------------
+
+    std::vector<std::string> fileNames = {
+        "../output/intconnect.txt"
+    };
+    for (int i = 0; i < 8; ++i) {
+        fileNames.push_back("../output/pe" + std::to_string(i) + ".txt");
+    }
+    for (const auto& fileName : fileNames) {
+        std::ofstream ofs(fileName, std::ios::trunc); // Abre el archivo y lo trunca (vacía)
+        if (!ofs) {
+            std::cerr << "Error al intentar limpiar el archivo: " << fileName << "\n";
+        }
+    }
+
+    //  -------------------------------------------
     //  | Inicio de la Funcionalidad del programa |
     //  -------------------------------------------
+
     Interconnect interconnect;
     interconnect.start();
 
@@ -51,18 +70,13 @@ int main(int argc, char *argv[]) {
     for (auto& pe : pes) pe->start();
     for (auto& pe : pes) pe->join();
 
-    //interconnect.stop();
+    interconnect.stop();
 
-    /*
-    // Ejecuta el script de Python para graficar
-    int status = system("python graph.py");
+    //  -------------------------------------------
+    //  |     Ejecución Script de Graficación     |
+    //  -------------------------------------------
 
-    if (status == -1) {
-        printf("Error al ejecutar el script de Python.\n");
-    } else {
-        printf("Script de Python ejecutado correctamente.\n");
-    }
-    */
+    // system("python3 graph.py");
 
     return 0;
 }

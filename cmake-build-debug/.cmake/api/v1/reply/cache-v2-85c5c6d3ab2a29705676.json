@@ -1198,6 +1198,30 @@
 			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2"
 		},
 		{
+			"name" : "Python3_EXECUTABLE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "No help, variable specified on the command line."
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/.venv/bin/python"
+		},
+		{
+			"name" : "Python_EXECUTABLE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "No help, variable specified on the command line."
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : "/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/.venv/bin/python"
+		},
+		{
 			"name" : "_CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED",
 			"properties" : 
 			[
