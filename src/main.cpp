@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     }
 
     //  -------------------------------------------
-    //  |          Limpiar Docs de Salida         |
+    //  |          Preparar Docs de Salida        |
     //  -------------------------------------------
 
     std::vector<std::string> fileNames = {
@@ -48,8 +48,11 @@ int main(int argc, char *argv[]) {
         std::ofstream ofs(fileName, std::ios::trunc); // Abre el archivo y lo trunca (vacía)
         if (!ofs) {
             std::cerr << "Error al intentar limpiar el archivo: " << fileName << "\n";
+        } else {
+            ofs << "Instrucción Recibido/Enviado Tamaño Fuente/Destino Ciclo\n";
         }
     }
+
 
     //  -------------------------------------------
     //  | Inicio de la Funcionalidad del programa |

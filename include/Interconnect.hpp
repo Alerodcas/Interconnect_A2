@@ -30,10 +30,14 @@ public:
     void sendMessage(const Message& msg); // llamado por PEs
     void registerPE(uint8_t id, PE* pe);
     void join(); // Para esperar a que el hilo worker termine
+    int clockCycle = 0; // reloj interno del interconnect
+    int BytesForCicle = 8; // Cuanta información se transfiere por ciclo
 
 private:
     void processLoop(); // hilo del interconnect
     void writeOutput(const std::string &line);
+
+    int getclockCycle() const;
 
     std::string outputPath;
 

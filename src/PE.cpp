@@ -1,9 +1,9 @@
-#include "PE.hpp" // Incluye el archivo de encabezado de la clase PE
+#include "PE.hpp"   // Incluye el archivo de encabezado de la clase PE
 #include <fstream>  // Para trabajar con archivos (lectura de instrucciones)
 #include <iostream> // Para entrada/salida estándar (cout, cerr)
 #include <sstream>  // Para manipular strings como streams (istringstream para parsear instrucciones)
 #include <iomanip>  // Para formatear la salida (ej: std::hex para hexadecimal)
-#include <mutex>           // Para la exclusión mutua al imprimir
+#include <mutex>    // Para la exclusión mutua al imprimir
 
 extern std::mutex cout_mutex; // Mutex global definido en main.cpp
 extern std::mutex cin_mutex; // Mutex global definido en main.cpp
@@ -41,6 +41,8 @@ void PE::executeInstruction(const std::string& instruction) {
     std::string opcode;                 // Variable para almacenar el código de operación (la primera palabra de la instrucción)
     iss >> opcode;                      // Lee el primer token (opcode) del stringstream
 
+    cycleCounter++; // ejecutando una instrucción → toma un ciclo
+
     {
         std::lock_guard<std::mutex> lock(cin_mutex);
         std::cin.get(); // Espera a que el usuario presione Enter
@@ -62,12 +64,13 @@ void PE::executeInstruction(const std::string& instruction) {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id <<  ": Encontrado CACHE HIT Addr 0x"
                           << std::hex << addr << ", " << std::dec << size << " bytes.\n";
+                writeOutput( "READ_MEM 0 0 P" + std::to_string(id) + " " + std::to_string(cycleCounter));
             }
         } else { // Si la lectura de la caché devuelve un vector vacío (cache miss)
 
             // Construir y enviar mensaje de READ_MEM al Interconnect
             Message msg;
-            msg.type = MessageType::READ_MEM; // Establece el tipo de mensaje a READ_MEM
+            msg.type = MessageType::READ_MEM;  // Establece el tipo de mensaje a READ_MEM
             msg.src = id;                     // Establece la fuente del mensaje como el ID del PE
             msg.qos = qos;                     // Establece la calidad de servicio del mensaje
             msg.addr = addr;                   // Establece la dirección de memoria a leer
@@ -80,7 +83,7 @@ void PE::executeInstruction(const std::string& instruction) {
                 std::cout << "PE " << id << ": Solicitud READ_MEM a IntConnect Addr 0x"
                           << std::hex << addr << "\n";
                 writeOutput( "READ_MEM 1 " +
-                                std::to_string(msg.size) + " " + std::to_string(0));
+                                std::to_string(msg.size) + " IC " + std::to_string(cycleCounter));
             }
 
             interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
@@ -96,11 +99,8 @@ void PE::executeInstruction(const std::string& instruction) {
         uint32_t addr = std::stoul(addr_str, nullptr, 16); // Convierte la dirección hexadecimal a un entero sin signo de 32 bits
         std::vector<uint8_t> concatenated_data;
 
-        for (size_t i = 0; i < num_lines; ++i) {
-            std::vector<uint8_t> current_line_data(16, id); // Simula 16 bytes de datos para la línea actual
-            writeToCache(addr + i, current_line_data);       // Escribe los datos simulados en la caché
-            concatenated_data.insert(concatenated_data.end(), current_line_data.begin(), current_line_data.end());
-        }
+        std::vector<uint8_t> simulate_data(4 * num_lines, id); // Simula 16 bytes de datos para la línea actual
+        writeToCache(addr, simulate_data);       // Escribe los datos simulados en la caché
 
         // Construir y enviar mensaje de WRITE_MEM al Interconnect
         Message msg;
@@ -108,16 +108,16 @@ void PE::executeInstruction(const std::string& instruction) {
         msg.src = id;                       // Establece la fuente del mensaje como el ID del PE
         msg.qos = qos;                      // Establece la calidad de servicio del mensaje
         msg.addr = addr;                    // Establece la dirección de memoria a escribir
-        msg.data = concatenated_data;       // Establece los datos a escribir
+        msg.data = simulate_data;           // Establece los datos a escribir
 
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << ": Escritura Linea Caché Addr 0x" << std::hex << addr
+            std::cout << "PE " << id << ": Escritura en Caché Addr 0x" << std::hex << addr % NUM_BLOCKS
                     << " (" << std::dec << num_lines << " Lineas) \n";
             std::cout << "PE " << id << ": Solicitud WRITE Addr 0x" << std::hex << addr
                     << " (" << std::dec << num_lines << " Lineas) \n";
             writeOutput( "WRITE_MEM 1 " +
-                            std::to_string(msg.data.size()) + " " + std::to_string(0));
+                            std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
         }
 
         interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
@@ -142,7 +142,7 @@ void PE::executeInstruction(const std::string& instruction) {
             std::cout << "PE " << id << " Solicitud Broadcast Invalidate Addr 0x"
                     << std::hex << cache_line << "\n";
             writeOutput( "BROADCAST_INVALIDATE 1 " +
-                std::to_string(msg.data.size()) + " " + std::to_string(0));
+                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
         }
 
         interconnect->sendMessage(msg); // Envía el mensaje al Interconnect
@@ -152,7 +152,7 @@ void PE::executeInstruction(const std::string& instruction) {
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "PE " << id << ": Instrucción desconocida → " << instruction << "\n";
-            writeOutput( "UNKNOWN 0 0 " + std::to_string(0));
+            writeOutput( "UNKNOWN 0 0 P" + std::to_string(id) + " " + std::to_string(cycleCounter));
         }
     }
 }
@@ -190,35 +190,38 @@ void PE::handleResponses() {
                 std::cout << "PE " << id << ": Recibido READ_RESP Actualizado Linea Caché Addr 0x"
                           << std::hex << msg.addr << "\n";
                 writeOutput( "READ_RESP 0 " +
-                                std::to_string(msg.data.size()) + " " + std::to_string(0));
+                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
             }
             writeToCache(msg.addr, msg.data); // Escribe los datos recibidos en la caché
         }
         // Si el tipo de mensaje es WRITE_RESP (respuesta a una escritura en memoria)
         else if (msg.type == MessageType::WRITE_RESP) {
+
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido WRITE_RESP Escritura Confirmada\n";
                 writeOutput( "WRITE_RESP 0 " +
-                                std::to_string(msg.data.size()) + " " + std::to_string(0));
+                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
             }
         }
         // Si el tipo de mensaje es INV_ACK (respuesta a una invalidación)
         else if (msg.type == MessageType::INV_ACK) {
+            cycleCounter += 2;
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido INV_ACK del PE " << int(msg.src) << "\n";
                 writeOutput( "INV_ACK 0 " +
-                                std::to_string(msg.data.size()) + " " + std::to_string(0));
+                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
             }
         }
         // Si el tipo de mensaje es INV_COMPLETE (indicación de que todas las invalidaciones fueron completadas)
         else if (msg.type == MessageType::INV_COMPLETE) {
+            cycleCounter += 2;
             {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibido INV_COMPLETE. Invalidaciones completadas.\n";
                 writeOutput( "INV_COMPLETE 0 " +
-                                std::to_string(msg.data.size()) + " " + std::to_string(0));
+                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
             }
         }
         // Si el tipo de mensaje no es reconocido
@@ -227,7 +230,7 @@ void PE::handleResponses() {
                 std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << "PE " << id << ": Recibió tipo de mensaje inesperado: " << static_cast<int>(msg.type) << "\n";
                 writeOutput( "UNKNOWN 0 " +
-                                std::to_string(msg.data.size()) + " " + std::to_string(0));
+                                std::to_string(msg.data.size()) + " IC " + std::to_string(cycleCounter));
             }
         }
 
@@ -320,4 +323,12 @@ int PE::getId() const {
 // Método getter para obtener el valor de QoS del PE
 uint8_t PE::getQoS() const {
     return qos;
+}
+
+int PE::getCycleCounter() const {
+    return cycleCounter;
+}
+
+void PE::setCycleCounter(int newClock) {
+    cycleCounter = newClock;
 }
