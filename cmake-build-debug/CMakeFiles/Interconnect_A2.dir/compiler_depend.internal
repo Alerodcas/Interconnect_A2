@@ -8,6 +8,7 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o
  /home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/include/MainMemory.hpp
  /home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/include/Message.hpp
  /home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/include/PE.hpp
+ /home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/include/Utils.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h
@@ -76,7 +77,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o
  /usr/include/c++/11/bits/semaphore_base.h
  /usr/include/c++/11/bits/shared_ptr.h
  /usr/include/c++/11/bits/shared_ptr_base.h
- /usr/include/c++/11/bits/specfun.h
  /usr/include/c++/11/bits/std_abs.h
  /usr/include/c++/11/bits/std_function.h
  /usr/include/c++/11/bits/std_mutex.h
@@ -114,7 +114,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o
  /usr/include/c++/11/chrono
  /usr/include/c++/11/climits
  /usr/include/c++/11/clocale
- /usr/include/c++/11/cmath
  /usr/include/c++/11/compare
  /usr/include/c++/11/concepts
  /usr/include/c++/11/condition_variable
@@ -162,18 +161,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o
  /usr/include/c++/11/string_view
  /usr/include/c++/11/system_error
  /usr/include/c++/11/thread
- /usr/include/c++/11/tr1/bessel_function.tcc
- /usr/include/c++/11/tr1/beta_function.tcc
- /usr/include/c++/11/tr1/ell_integral.tcc
- /usr/include/c++/11/tr1/exp_integral.tcc
- /usr/include/c++/11/tr1/gamma.tcc
- /usr/include/c++/11/tr1/hypergeometric.tcc
- /usr/include/c++/11/tr1/legendre_function.tcc
- /usr/include/c++/11/tr1/modified_bessel_func.tcc
- /usr/include/c++/11/tr1/poly_hermite.tcc
- /usr/include/c++/11/tr1/poly_laguerre.tcc
- /usr/include/c++/11/tr1/riemann_zeta.tcc
- /usr/include/c++/11/tr1/special_function_util.h
  /usr/include/c++/11/tuple
  /usr/include/c++/11/type_traits
  /usr/include/c++/11/typeinfo
@@ -190,7 +177,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o
  /usr/include/linux/errno.h
  /usr/include/linux/limits.h
  /usr/include/locale.h
- /usr/include/math.h
  /usr/include/pthread.h
  /usr/include/sched.h
  /usr/include/semaphore.h
@@ -216,21 +202,12 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o
  /usr/include/x86_64-linux-gnu/bits/errno.h
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h
  /usr/include/x86_64-linux-gnu/bits/floatn.h
- /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h
- /usr/include/x86_64-linux-gnu/bits/fp-fast.h
- /usr/include/x86_64-linux-gnu/bits/fp-logb.h
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h
- /usr/include/x86_64-linux-gnu/bits/iscanonical.h
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h
- /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h
  /usr/include/x86_64-linux-gnu/bits/local_lim.h
  /usr/include/x86_64-linux-gnu/bits/locale.h
  /usr/include/x86_64-linux-gnu/bits/long-double.h
- /usr/include/x86_64-linux-gnu/bits/math-vector.h
- /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h
- /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h
- /usr/include/x86_64-linux-gnu/bits/mathcalls.h
  /usr/include/x86_64-linux-gnu/bits/posix1_lim.h
  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h

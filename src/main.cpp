@@ -15,23 +15,38 @@ int main(int argc, char *argv[]) {
     //  -------------------------------------------
 
     // Verificar si se proporcionaron argumentos suficientes
-    if (argc == 2) {
-        // Procesar el primer argumento: modo de ejecución
-        try {
-            executionMode = std::stoi(argv[1]);
-            if (executionMode < 0 || executionMode > 1) {
-                std::cerr << "Error: Modo de ejecución inválido. Debe ser 0 (FIFO) o 1 (Prioridad).\n";
-                return 1; // Indica un error en la ejecución
-            }
-            // Aquí podrías configurar el Interconnect con el modo de ejecución
-            std::cout << "<< Modo de ejecución seleccionado: " << executionMode << " >>\n";
-        } catch (const std::invalid_argument& e) {
-            std::cerr << "Error: El primer argumento no es un número válido para el modo de ejecución.\n";
-            return 1;
-        } catch (const std::out_of_range& e) {
-            std::cerr << "Error: El primer argumento está fuera del rango válido para el modo de ejecución.\n";
+    if (argc != 3) {
+        std::cerr << "Uso: " << argv[0] << " <modo_ejecución (0|1)> <número_test (1|2)>\n";
+        return 1;
+    }
+
+    // Procesar el primer argumento
+    try {
+        executionMode = std::stoi(argv[1]);
+        if (executionMode < 0 || executionMode > 1) {
+            std::cerr << "Error: Modo de ejecución inválido. Debe ser 0 (FIFO) o 1 (Prioridad).\n";
             return 1;
         }
+        std::string executionString;
+        if (executionMode == 0) executionString = "0) FIFO"; else executionString = "1) Prioridad";
+        std::cout << "<< Modo de ejecución seleccionado: " << executionString << " >>\n";
+    } catch (...) {
+        std::cerr << "Error: El primer argumento debe ser un número válido (0 o 1).\n";
+        return 1;
+    }
+
+    // Procesar el segundo argumento
+    int testNumber;
+    try {
+        testNumber = std::stoi(argv[2]);
+        if (testNumber != 1 && testNumber != 2) {
+            std::cerr << "Error: El número de test debe ser 1 o 2.\n";
+            return 1;
+        }
+        std::cout << "<< Ejecutando Test " << testNumber << " >>\n";
+    } catch (...) {
+        std::cerr << "Error: El segundo argumento debe ser un número válido (1 o 2).\n";
+        return 1;
     }
 
     //  -------------------------------------------
@@ -53,7 +68,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
     //  -------------------------------------------
     //  | Inicio de la Funcionalidad del programa |
     //  -------------------------------------------
@@ -62,12 +76,15 @@ int main(int argc, char *argv[]) {
     interconnect.start();
 
     std::vector<std::unique_ptr<PE>> pes;
+    std::string instructionPath = "../workloads/test" + std::to_string(testNumber);
+    std::cout << "<< Cargando instrucciones desde: " << instructionPath << " >>\n";
+    std::cout << "<< Presiona Enter para avanzar al siguiente paso >>\n";
 
     for (int i = 0; i < 8; i++) {
         auto pe = std::make_unique<PE>(i, 0x00 + i, &interconnect);
         interconnect.registerPE(i, pe.get());
         pes.push_back(std::move(pe));
-        pes[i]->loadInstructions("../workloads/workload_" + std::to_string(i) + ".txt");
+        pes[i]->loadInstructions(instructionPath + "/workload_" + std::to_string(i) + ".txt");
     }
 
     for (auto& pe : pes) pe->start();

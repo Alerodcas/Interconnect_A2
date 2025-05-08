@@ -35,6 +35,8 @@ public:
     int getCycleCounter() const;
     void setCycleCounter(int newClock);
 
+    bool getComplete() const;
+
 private:
     void execute();  // función para el hilo
     void executeInstruction(const std::string& instruction);
@@ -59,6 +61,8 @@ private:
     std::vector<uint8_t> readFromCache(uint32_t addr, size_t size);
 
     int cycleCounter = 0; // Contador local de ciclos
+    bool complete = false;
+
 };
 
 #endif // PE_HPP

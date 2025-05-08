@@ -221,6 +221,7 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/CacheBlock.hpp \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/Interconnect.hpp \
  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/MainMemory.hpp \
+ /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/Utils.h \
  /usr/include/c++/11/iostream /usr/include/c++/11/istream \
  /usr/include/c++/11/bits/istream.tcc /usr/include/c++/11/algorithm \
  /usr/include/c++/11/bits/ranges_algo.h \
@@ -229,28 +230,7 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: \
  /usr/include/c++/11/bits/ranges_util.h \
  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
  /usr/include/c++/11/functional /usr/include/c++/11/bits/std_function.h \
- /usr/include/c++/11/pstl/execution_defs.h /usr/include/c++/11/cmath \
- /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
- /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
- /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
- /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
- /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
- /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
- /usr/include/c++/11/bits/specfun.h /usr/include/c++/11/tr1/gamma.tcc \
- /usr/include/c++/11/tr1/special_function_util.h \
- /usr/include/c++/11/tr1/bessel_function.tcc \
- /usr/include/c++/11/tr1/beta_function.tcc \
- /usr/include/c++/11/tr1/ell_integral.tcc \
- /usr/include/c++/11/tr1/exp_integral.tcc \
- /usr/include/c++/11/tr1/hypergeometric.tcc \
- /usr/include/c++/11/tr1/legendre_function.tcc \
- /usr/include/c++/11/tr1/modified_bessel_func.tcc \
- /usr/include/c++/11/tr1/poly_hermite.tcc \
- /usr/include/c++/11/tr1/poly_laguerre.tcc \
- /usr/include/c++/11/tr1/riemann_zeta.tcc /usr/include/c++/11/fstream \
+ /usr/include/c++/11/pstl/execution_defs.h /usr/include/c++/11/fstream \
  /usr/include/c++/11/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \

@@ -1,10 +1,10 @@
 #include "Interconnect.hpp" // Incluye el archivo de encabezado de la clase Interconnect
-#include <iostream>        // Para entrada/salida estándar (cout)
-#include <mutex>           // Para la exclusión mutua al imprimir
-#include <queue>           // Para la cola de prioridad
-#include <vector>          // Para usar std::vector en la cola FIFO
-#include <algorithm>       // Para std::sort en la cola de prioridad
-#include <cmath>
+#include "Utils.h"          // Archivo Funciones Adicionales
+#include <iostream>         // Para entrada/salida estándar (cout)
+#include <mutex>            // Para la exclusión mutua al imprimir
+#include <queue>            // Para la cola de prioridad
+#include <vector>           // Para usar std::vector en la cola FIFO
+#include <algorithm>        // Para std::sort en la cola de prioridad
 #include <fstream>
 
 extern std::mutex cout_mutex; // Mutex global definido en main.cpp
@@ -36,7 +36,6 @@ void Interconnect::stop() {
         worker.join();       // Espera a que el thread worker termine su ejecución
     }
 }
-
 
 // Método para enviar un mensaje al Interconnect
 void Interconnect::sendMessage(const Message& msg) {
@@ -137,8 +136,9 @@ void Interconnect::processLoop() {
                 sendTransferTime = (6 + response.data.size()) / BytesForCicle;
                 if (sendTransferTime == 0) sendTransferTime = 1;
 
+                while (peDirectory[msg.src]->getCycleCounter() < clockCycle + sendTransferTime && !peDirectory[msg.src]->getComplete()) {waitUntilReady();}
+                if (peDirectory[msg.src]->getComplete() == true) peDirectory[msg.src]->setCycleCounter(clockCycle + sendTransferTime);
                 peDirectory[msg.src]->receiveResponse(response);
-                peDirectory[msg.src]->setCycleCounter(clockCycle + sendTransferTime);
                 peDirectory[msg.src]->handleResponses();
 
                 break;
@@ -185,8 +185,9 @@ void Interconnect::processLoop() {
                 sendTransferTime = 3 / BytesForCicle;
                 if (sendTransferTime == 0) sendTransferTime = 1;
 
+                while (peDirectory[msg.src]->getCycleCounter() < clockCycle + sendTransferTime && !peDirectory[msg.src]->getComplete()) {waitUntilReady();}
+
                 peDirectory[msg.src]->receiveResponse(response);
-                peDirectory[msg.src]->setCycleCounter(clockCycle + sendTransferTime);
                 peDirectory[msg.src]->handleResponses();
 
                 break;
@@ -227,8 +228,8 @@ void Interconnect::processLoop() {
                         invAck.type = MessageType::INV_ACK;
                         invAck.src = pe_id;
                         invAck.qos = pe_ptr->getQoS();
+                        while (pe_ptr->getCycleCounter() < clockCycle + sendTransferTime && !peDirectory[msg.src]->getComplete()) {waitUntilReady();}
                         pe_ptr->receiveResponse(invAck);
-                        pe_ptr->setCycleCounter(clockCycle + sendTransferTime);
                         pe_ptr->handleResponses();
                     }
                 }
@@ -250,8 +251,9 @@ void Interconnect::processLoop() {
                 sendTransferTime = (2) / BytesForCicle;
                 if (sendTransferTime == 0) sendTransferTime = 1;
 
+                while (peDirectory[sourcePE]->getCycleCounter() < clockCycle + sendTransferTime && !peDirectory[msg.src]->getComplete()) {waitUntilReady();}
+
                 peDirectory[sourcePE]->receiveResponse(invComplete);
-                peDirectory[msg.src]->setCycleCounter(clockCycle + sendTransferTime);
                 peDirectory[sourcePE]->handleResponses();
                 break;
             }

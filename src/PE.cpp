@@ -102,7 +102,7 @@ void PE::executeInstruction(const std::string& instruction) {
         uint32_t addr = std::stoul(addr_str, nullptr, 16); // Convierte la dirección hexadecimal a un entero sin signo de 32 bits
         std::vector<uint8_t> concatenated_data;
 
-        std::vector<uint8_t> simulate_data(4 * num_lines, id); // Simula 16 bytes de datos para la línea actual
+        std::vector<uint8_t> simulate_data(4 * num_lines, id); // Simula datos para la informacion enviada
         writeToCache(addr, simulate_data);       // Escribe los datos simulados en la caché
 
         // Construir y enviar mensaje de WRITE_MEM al Interconnect
@@ -142,7 +142,7 @@ void PE::executeInstruction(const std::string& instruction) {
 
         {
             std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "PE " << id << " Solicitud Broadcast Invalidate Addr 0x"
+            std::cout << "PE " << id << ": Solicitud Broadcast Invalidate Addr 0x"
                     << std::hex << cache_line << "\n";
             writeOutput( "BROADCAST_INVALIDATE 1 " +
                 std::to_string(6) + " IC " + std::to_string(cycleCounter));
@@ -270,6 +270,7 @@ void PE::execute() {
 
         executeInstruction(instr); // Ejecuta la instrucción actual
     }
+    complete = true;
 }
 
 // Método para escribir datos en la caché del PE
@@ -340,4 +341,8 @@ void PE::setCycleCounter(int newClock) {
         std::lock_guard<std::mutex> lock(cycle);
         cycleCounter = newClock;
     }
+}
+
+bool PE::getComplete() const {
+    return complete;
 }

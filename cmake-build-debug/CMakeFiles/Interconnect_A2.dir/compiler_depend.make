@@ -7,6 +7,7 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: /home/itsrichard/Document
   /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/MainMemory.hpp \
   /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/Message.hpp \
   /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/PE.hpp \
+  /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/Utils.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -75,7 +76,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: /home/itsrichard/Document
   /usr/include/c++/11/bits/semaphore_base.h \
   /usr/include/c++/11/bits/shared_ptr.h \
   /usr/include/c++/11/bits/shared_ptr_base.h \
-  /usr/include/c++/11/bits/specfun.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/c++/11/bits/std_function.h \
   /usr/include/c++/11/bits/std_mutex.h \
@@ -113,7 +113,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: /home/itsrichard/Document
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/climits \
   /usr/include/c++/11/clocale \
-  /usr/include/c++/11/cmath \
   /usr/include/c++/11/compare \
   /usr/include/c++/11/concepts \
   /usr/include/c++/11/condition_variable \
@@ -161,18 +160,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: /home/itsrichard/Document
   /usr/include/c++/11/string_view \
   /usr/include/c++/11/system_error \
   /usr/include/c++/11/thread \
-  /usr/include/c++/11/tr1/bessel_function.tcc \
-  /usr/include/c++/11/tr1/beta_function.tcc \
-  /usr/include/c++/11/tr1/ell_integral.tcc \
-  /usr/include/c++/11/tr1/exp_integral.tcc \
-  /usr/include/c++/11/tr1/gamma.tcc \
-  /usr/include/c++/11/tr1/hypergeometric.tcc \
-  /usr/include/c++/11/tr1/legendre_function.tcc \
-  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
-  /usr/include/c++/11/tr1/poly_hermite.tcc \
-  /usr/include/c++/11/tr1/poly_laguerre.tcc \
-  /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /usr/include/c++/11/tr1/special_function_util.h \
   /usr/include/c++/11/tuple \
   /usr/include/c++/11/type_traits \
   /usr/include/c++/11/typeinfo \
@@ -189,7 +176,6 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: /home/itsrichard/Document
   /usr/include/linux/errno.h \
   /usr/include/linux/limits.h \
   /usr/include/locale.h \
-  /usr/include/math.h \
   /usr/include/pthread.h \
   /usr/include/sched.h \
   /usr/include/semaphore.h \
@@ -215,21 +201,12 @@ CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o: /home/itsrichard/Document
   /usr/include/x86_64-linux-gnu/bits/errno.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
-  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
-  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
-  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
   /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
   /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
-  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
-  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
   /usr/include/x86_64-linux-gnu/bits/local_lim.h \
   /usr/include/x86_64-linux-gnu/bits/locale.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
-  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
   /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
@@ -1130,6 +1107,8 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/c++/11/bits/locale_conv.h:
 
+/home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/src/PE.cpp:
+
 /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/src/main.cpp:
 
 /home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/src/MainMemory.cpp:
@@ -1170,6 +1149,8 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
 
+/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
@@ -1192,7 +1173,13 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
+/usr/include/x86_64-linux-gnu/bits/timex.h:
+
 /usr/include/x86_64-linux-gnu/bits/time.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+
+/usr/include/x86_64-linux-gnu/bits/syscall.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
@@ -1206,6 +1193,8 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
+/usr/include/x86_64-linux-gnu/bits/semaphore.h:
+
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
@@ -1214,15 +1203,9 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
 
-/usr/include/x86_64-linux-gnu/bits/math-vector.h:
-
 /usr/include/x86_64-linux-gnu/bits/long-double.h:
 
 /usr/include/x86_64-linux-gnu/bits/local_lim.h:
-
-/usr/include/x86_64-linux-gnu/bits/timex.h:
-
-/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
 
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
@@ -1238,7 +1221,9 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/x86_64-linux-gnu/bits/endian.h:
 
-/usr/include/x86_64-linux-gnu/bits/iscanonical.h:
+/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
 
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
 
@@ -1266,10 +1251,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/stdio.h:
 
-/usr/include/x86_64-linux-gnu/bits/semaphore.h:
-
-/usr/include/math.h:
-
 /usr/include/locale.h:
 
 /usr/include/linux/limits.h:
@@ -1290,35 +1271,7 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/endian.h:
 
-/usr/include/c++/11/vector:
-
-/usr/include/c++/11/utility:
-
-/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
-
-/usr/include/c++/11/typeinfo:
-
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
-
-/usr/include/c++/11/type_traits:
-
-/usr/include/c++/11/tr1/special_function_util.h:
-
-/usr/include/c++/11/tr1/riemann_zeta.tcc:
-
-/usr/include/c++/11/tr1/poly_laguerre.tcc:
-
-/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
-
-/usr/include/c++/11/tr1/legendre_function.tcc:
-
 /usr/include/c++/11/bits/std_abs.h:
-
-/usr/include/c++/11/stop_token:
 
 /usr/include/c++/11/bits/algorithmfwd.h:
 
@@ -1333,10 +1286,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/c++/11/ext/aligned_buffer.h:
 
 /usr/include/c++/11/bits/range_access.h:
-
-/usr/include/c++/11/bits/predefined_ops.h:
-
-/usr/include/c++/11/bits/stl_deque.h:
 
 /usr/include/c++/11/bits/iterator_concepts.h:
 
@@ -1358,23 +1307,17 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/c++/11/bits/localefwd.h:
 
+/usr/include/c++/11/vector:
+
 /usr/include/c++/11/sstream:
 
 /usr/include/c++/11/bits/locale_classes.h:
 
 /usr/include/c++/11/bits/atomic_lockfree_defines.h:
 
-/usr/include/c++/11/tr1/poly_hermite.tcc:
-
 /usr/include/c++/11/bits/ranges_util.h:
 
 /usr/include/c++/11/bits/istream.tcc:
-
-/usr/include/c++/11/bits/specfun.h:
-
-/usr/include/c++/11/bits/ranges_algo.h:
-
-/usr/include/c++/11/bits/invoke.h:
 
 /usr/include/c++/11/bits/move.h:
 
@@ -1384,7 +1327,21 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/c++/11/bits/std_mutex.h:
 
+/usr/include/c++/11/debug/debug.h:
+
 /usr/include/c++/11/bits/functexcept.h:
+
+/usr/include/c++/11/bits/refwrap.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
+
+/usr/include/c++/11/bits/exception.h:
+
+/usr/include/x86_64-linux-gnu/sys/types.h:
+
+/usr/include/c++/11/bits/streambuf_iterator.h:
+
+/usr/include/c++/11/ext/alloc_traits.h:
 
 /usr/include/c++/11/bits/shared_ptr.h:
 
@@ -1393,6 +1350,12 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/c++/11/bits/memoryfwd.h:
 
 /usr/include/c++/11/bits/alloc_traits.h:
+
+/usr/include/c++/11/bits/invoke.h:
+
+/usr/include/c++/11/bits/ranges_algo.h:
+
+/usr/include/c++/11/stop_token:
 
 /usr/include/c++/11/bits/ptr_traits.h:
 
@@ -1404,13 +1367,27 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/alloca.h:
 
-/usr/include/c++/11/debug/debug.h:
-
-/usr/include/c++/11/cmath:
-
 /usr/include/c++/11/atomic:
 
+/usr/include/c++/11/bits/stl_uninitialized.h:
+
+/usr/include/c++/11/cwctype:
+
+/usr/include/c++/11/bits/ranges_cmp.h:
+
 /usr/include/asm-generic/errno.h:
+
+/usr/include/c++/11/bits/predefined_ops.h:
+
+/usr/include/c++/11/bits/stl_deque.h:
+
+/home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/include/Utils.h:
+
+/usr/include/c++/11/bits/concept_check.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
+
+/usr/include/c++/11/bits/basic_ios.tcc:
 
 /usr/include/c++/11/bits/stream_iterator.h:
 
@@ -1421,8 +1398,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/c++/11/array:
 
 /usr/include/c++/11/bits/locale_classes.tcc:
-
-/usr/include/c++/11/tr1/hypergeometric.tcc:
 
 /usr/include/asm-generic/errno-base.h:
 
@@ -1448,32 +1423,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/c++/11/ext/atomicity.h:
 
-/home/itsrichard/Documentos/2025\ -\ I\ Semestre/Arquitectura\ de\ Computadores/Proyectos/Interconnect_A2/src/PE.cpp:
-
-/usr/include/c++/11/tr1/ell_integral.tcc:
-
-/usr/include/c++/11/bits/char_traits.h:
-
-/usr/include/c++/11/bits/refwrap.h:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
-
-/usr/include/c++/11/bits/exception.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
-
-/usr/include/c++/11/cwctype:
-
-/usr/include/c++/11/bits/ranges_cmp.h:
-
-/usr/include/c++/11/bits/stl_uninitialized.h:
-
-/usr/include/x86_64-linux-gnu/sys/types.h:
-
-/usr/include/c++/11/bits/streambuf_iterator.h:
-
-/usr/include/c++/11/ext/alloc_traits.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
 
 /usr/include/c++/11/bits/node_handle.h:
@@ -1487,6 +1436,8 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
 /usr/include/c++/11/bits/basic_string.h:
+
+/usr/include/c++/11/bits/char_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
 
@@ -1520,12 +1471,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/c++/11/bits/ios_base.h:
 
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-
-/usr/include/c++/11/bits/basic_ios.tcc:
-
-/usr/include/c++/11/bits/concept_check.h:
-
 /usr/include/c++/11/bits/exception_ptr.h:
 
 /usr/include/c++/11/thread:
@@ -1537,8 +1482,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/c++/11/numbers:
 
 /usr/include/c++/11/bits/postypes.h:
-
-/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
 /usr/include/c++/11/bits/locale_facets.h:
 
@@ -1553,8 +1496,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/linux/close_range.h:
 
 /usr/include/c++/11/bits/exception_defines.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
 
 /usr/include/c++/11/bits/cxxabi_init_exception.h:
 
@@ -1572,8 +1513,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 
-/usr/include/c++/11/tr1/modified_bessel_func.tcc:
-
 /usr/include/c++/11/bits/hash_bytes.h:
 
 /usr/include/c++/11/bits/stl_construct.h:
@@ -1581,8 +1520,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
 /usr/include/c++/11/chrono:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
 
 /usr/include/c++/11/bits/stl_bvector.h:
 
@@ -1626,8 +1563,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/c++/11/bits/string_view.tcc:
 
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
-
 /usr/include/c++/11/bits/stringfwd.h:
 
 /usr/include/c++/11/bits/vector.tcc:
@@ -1645,8 +1580,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/stdc-predef.h:
 
 /usr/include/c++/11/bits/uses_allocator.h:
-
-/usr/include/c++/11/tr1/gamma.tcc:
 
 /usr/include/sched.h:
 
@@ -1675,8 +1608,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
 /usr/include/c++/11/cstdio:
 
@@ -1718,8 +1649,6 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
-/usr/include/c++/11/tr1/exp_integral.tcc:
-
 /usr/include/c++/11/semaphore:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
@@ -1735,6 +1664,10 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 /usr/include/c++/11/bits/stl_function.h:
 
 /usr/include/c++/11/string_view:
+
+/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
+
+/usr/include/c++/11/typeinfo:
 
 /usr/include/c++/11/limits:
 
@@ -1758,12 +1691,10 @@ CMakeFiles/Interconnect_A2.dir/src/main.cpp.o: /home/itsrichard/Documentos/2025\
 
 /usr/include/c++/11/string:
 
-/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
-/usr/include/c++/11/tr1/bessel_function.tcc:
+/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
-/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+/usr/include/c++/11/type_traits:
 
-/usr/include/x86_64-linux-gnu/bits/syscall.h:
-
-/usr/include/c++/11/tr1/beta_function.tcc:
+/usr/include/c++/11/utility:
