@@ -12,9 +12,14 @@ Abrí una terminal en la carpeta raíz del proyecto y ejecutá:
 cd build
 ```
 
-### Construir el Ejecutable
+### 2. Construir el Ejecutable
 
-Ejecutá el siguiente comando para compilar el proyecto:
+Ejecute el siguiente comando para preparar las dependencias:
+```bash
+cmake ..
+```
+
+Luego ejecute la siguiente linea para crear el ejecutable:
 ```bash
 make
 ```

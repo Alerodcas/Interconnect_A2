@@ -211,6 +211,8 @@ void PE::handleResponses() {
                 writeOutput( "WRITE_RESP 0 " +
                                 std::to_string(3) + " IC " + std::to_string(cycleCounter));
             }
+
+            writeToCache(msg.addr, msg.data);
         }
         // Si el tipo de mensaje es INV_ACK (respuesta a una invalidación)
         else if (msg.type == MessageType::INV_ACK) {
