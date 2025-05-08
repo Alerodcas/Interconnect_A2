@@ -31,10 +31,11 @@ pes = [loadLogs(os.path.join(folderPath, f"pe{i}.txt")) for i in range(8)]
 # --- Gráfica 1: Ancho de banda por ciclo en interconnect ---
 bw = interconnect.groupby("cycle")["size"].sum()
 plt.figure(figsize=(10, 4))
-bw.plot(kind="bar", color="steelblue")
+bw.plot(kind="line", color="steelblue", marker="o")  # línea con puntos marcados
 plt.title("Ancho de banda por ciclo (Interconnect)")
 plt.xlabel("Ciclo")
 plt.ylabel("Bytes transmitidos")
+plt.grid(True)
 plt.tight_layout()
 plt.show()
 

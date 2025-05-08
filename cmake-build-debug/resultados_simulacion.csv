@@ -1,5 +1,0 @@
-tiempo,pe_id,mensajes,datos_bytes,tipo_mensaje
-1,0,1,64,WRITE_MEM
-2,1,1,32,READ_MEM
-2,0,1,16,BROADCAST_INVALIDATE
-3,2,1,64,WRITE_MEM

@@ -1,5 +1,5 @@
 #include "Interconnect.hpp" // Incluye el archivo de encabezado de la clase Interconnect
-#include "Utils.h"          // Archivo Funciones Adicionales
+#include "Utils.hpp"          // Archivo Funciones Adicionales
 #include <iostream>         // Para entrada/salida estándar (cout)
 #include <mutex>            // Para la exclusión mutua al imprimir
 #include <queue>            // Para la cola de prioridad

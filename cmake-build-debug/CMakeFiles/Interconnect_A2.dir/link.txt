@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/Interconnect_A2.dir/src/Interconnect.cpp.o CMakeFiles/Interconnect_A2.dir/src/MainMemory.cpp.o CMakeFiles/Interconnect_A2.dir/src/PE.cpp.o CMakeFiles/Interconnect_A2.dir/src/main.cpp.o -o Interconnect_A2  -lpthread

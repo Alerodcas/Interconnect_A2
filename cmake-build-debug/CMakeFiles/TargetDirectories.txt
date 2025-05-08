@@ -1,3 +1,0 @@
-/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug/CMakeFiles/Interconnect_A2.dir
-/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/itsrichard/Documentos/2025 - I Semestre/Arquitectura de Computadores/Proyectos/Interconnect_A2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
